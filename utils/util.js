@@ -1,6 +1,6 @@
 let status = 0;    // 0 测试环境  1 生产环境
 
-let ajaxUrl = status==0?'https://11111':'https://22222';
+let ajaxUrl = status==0?'https://11111':'https://1111';
 
 //通用Ajax请求接口
 let fetch = (_url,params,type) => {
