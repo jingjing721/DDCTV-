@@ -83,7 +83,6 @@ let isPhone = (number) => {
     }
 }
 
-
 module.exports = {
     fetch:fetch,                            //封装Ajax
     getQueryString:getQueryString,          //截取URL参数
