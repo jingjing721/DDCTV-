@@ -1,11 +1,34 @@
 {
     "pages":[
-        "pages/index/index"
+        "pages/index/index",
+        "pages/classify/classify",
+        "pages/v-detail/v-detail",
+        "pages/c-detail/c-detail"
     ],
     "window":{
         "backgroundTextStyle":"light",
         "navigationBarBackgroundColor": "#fff",
         "navigationBarTitleText": "WeChat",
         "navigationBarTextStyle":"black"
-    }
+    },
+    "tabBar":{  
+	    "color":"#afafaf",  
+	    "selectedColor":"#ffc608",  
+	    "borderStyle":"#ccc",  
+	    "backgroundColor":"#fff",
+	    "list": [  
+	    	{
+	    		"text": "十见",  
+	    		"pagePath": "pages/index/index",  
+	    		"iconPath": "images/home.png",  
+	    		"selectedIconPath": "images/home-active.png"  
+	    	},
+	      	{
+	    		"text": "分类",  
+	    		"pagePath": "pages/classify/classify",  
+	    		"iconPath": "images/classify.png",  
+	    		"selectedIconPath": "images/classify-active.png"  
+	    	}
+	    ]
+	}
 }

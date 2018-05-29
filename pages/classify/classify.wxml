@@ -1,0 +1,9 @@
+<view class="wraper" wx:if="{{pageShow==1}}">
+    <view class="list">
+        <view class="item" wx:for="{{list}}" wx:key="key" catchtap="goDetail">
+            <image src="{{item.imgUrl}}"></image>
+            <view class="title">{{item.title}}</view>
+            <view class="desc">{{item.desc}}</view>
+        </view>
+    </view>
+</view>

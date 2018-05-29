@@ -1,0 +1,50 @@
+<view class="wraper" wx:if="{{pageShow==1}}">
+    <view class="video"></view>
+    <scroll-view scroll-y="true" class="content">
+    	<view class="name two-line">7种夏日面条，一天一碗不重样</view>
+    	<view class="tags">#假装很会吃</view>
+    	<view class="desc">面的软硬、粗细、质地的不同，煮面技巧也大有讲究。中式的湿面、干面、手擀面，还有日式的荞麦面、乌冬面，这个里面大有讲究。面的软硬、粗细、质地的不同，煮面技巧也大有讲究。中式的湿面、干面、手擀面，还有日式的荞麦面、乌冬面，这个里面大有讲究。</view>
+        <view class="material">
+            <view class="title">一般食材</view>
+            <view class="item">
+                <view class="left">白砂糖</view><view class="left">100clove</view>
+            </view>
+            <view class="item">
+                <view class="left">全脂牛奶</view><view class="left">800g</view>
+            </view>
+            <view class="item">
+                <view class="left">玉米淀粉</view><view class="left">28g</view>
+            </view>
+            <view class="item">
+                <view class="left">盐</view><view class="left">10g</view>
+            </view>
+            <view class="item">
+                <view class="left">鸡蛋</view><view class="left">2个</view>
+            </view>
+            <view class="item">
+                <view class="left">速溶咖啡</view><view class="left">10g</view>
+            </view>
+        </view>
+        <view class="step">
+            <view class="title">步骤1<text>/4</text></view>
+            <view class="main">步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤</view>
+        </view>
+        <view class="step">
+            <view class="title">步骤2<text>/4</text></view>
+            <view class="main">步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤</view>
+        </view>
+        <view class="step">
+            <view class="title">步骤3<text>/4</text></view>
+            <view class="main">步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤</view>
+        </view>
+        <view class="step">
+            <view class="title">步骤4<text>/4</text></view>
+            <view class="main">步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤</view>
+        </view>
+    </scroll-view>
+    <!-- 点赞 -->
+    <view class="praise">
+    	<view>点赞</view>
+    	<view>1283</view>
+    </view>
+</view>

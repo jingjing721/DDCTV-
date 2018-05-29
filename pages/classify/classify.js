@@ -1,0 +1,58 @@
+import util from '../../utils/util.js';
+Page({
+    data:{
+        pageShow:1,         //页面是否显示 0不显示  1显示
+        list:[
+            {
+                id:1,
+                title:'假装很会吃',
+                desc:'美食教程',
+                imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
+            },
+            {
+                id:2,
+                title:'假装很会吃',
+                desc:'美食教程',
+                imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
+            },
+            {
+                id:3,
+                title:'假装很会吃',
+                desc:'美食教程',
+                imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
+            },
+            {
+                id:4,
+                title:'假装很会吃',
+                desc:'美食教程',
+                imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
+            },
+            {
+                id:5,
+                title:'假装很会吃',
+                desc:'美食教程',
+                imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
+            }
+        ]
+    },
+    goDetail(){
+        //跳转到详情页
+        wx.navigateTo({
+            url:'../c-detail/c-detail'
+        })
+    },
+    onShow(){},
+    onLoad(e){
+        //设置页面标题
+        wx.setNavigationBarTitle({
+            title:'DDCTV'
+        })
+    },
+    onShareAppMessage(){
+        //转发分享
+        return {
+            title:'DDCTV',
+            path:'/pages/index/index'
+        }
+    }
+})
