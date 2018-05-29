@@ -47,7 +47,7 @@ Page({
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
-        console.log('加载下一页')
+        console.log('加载下一页1')
     },
     play(e){
         //是否播放
