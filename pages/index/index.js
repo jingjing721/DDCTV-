@@ -9,7 +9,7 @@ Page({
                 title:'1他靠40道私房菜征服名流富豪',
                 time:'5月12日',
                 duration:'04:23',
-                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。2017年，40岁的他借钱和老婆一起，终于开出这家梦想中的餐厅，开业一年，便杀入当地年度最佳餐厅十强，好莱坞明星、导演更是这里的常客。',
+                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。',
                 imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
                 vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
             },
@@ -19,7 +19,7 @@ Page({
                 title:'2他靠40道私房菜征服名流富豪',
                 time:'5月11日',
                 duration:'04:23',
-                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。2017年，40岁的他借钱和老婆一起，终于开出这家梦想中的餐厅，开业一年，便杀入当地年度最佳餐厅十强，好莱坞明星、导演更是这里的常客。',
+                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。',
                 imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
                 vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
             },
@@ -29,7 +29,7 @@ Page({
                 title:'3他靠40道私房菜征服名流富豪',
                 time:'5月10日',
                 duration:'04:23',
-                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。2017年，40岁的他借钱和老婆一起，终于开出这家梦想中的餐厅，开业一年，便杀入当地年度最佳餐厅十强，好莱坞明星、导演更是这里的常客。',
+                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。',
                 imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
                 vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
             },
@@ -39,7 +39,7 @@ Page({
                 title:'4他靠40道私房菜征服名流富豪',
                 time:'5月10日',
                 duration:'04:23',
-                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。2017年，40岁的他借钱和老婆一起，终于开出这家梦想中的餐厅，开业一年，便杀入当地年度最佳餐厅十强，好莱坞明星、导演更是这里的常客。',
+                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。',
                 imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
                 vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
             },
@@ -47,7 +47,7 @@ Page({
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
-        console.log('加载下一页1')
+        console.log('加载下一页')
     },
     play(e){
         //是否播放
