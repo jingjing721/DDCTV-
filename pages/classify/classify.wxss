@@ -1,23 +1,26 @@
-.wraper{overflow:hidden;}
+.list-title{
+	font-size: 56rpx;
+	font-weight: bold;
+	color: #1A1A1A;
+	margin-top: 25rpx;
+	padding-left: 20rpx;
+}
+.wraper{
+	padding-left: 40rpx;
+	overflow:hidden;
+}
 .wraper .list{
 	overflow:hidden;
-	padding: 18rpx;
 }
 .item{
-	width: 340rpx;
-	height: 340rpx;
-	border-radius: 12rpx;
-	margin:8rpx;
+	width: 334rpx;
+	margin-left: 20rpx;
+	margin-top: 25rpx;
 	float: left;
 	position: relative;
 	overflow:hidden;
 }
 .item image{
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	left: 0;
-	top: 0;
-	right: 0;
-	bottom: 0;
+	width: 334rpx;
+	height: 334rpx;
 }

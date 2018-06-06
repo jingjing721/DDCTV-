@@ -1,4 +1,5 @@
 <view class="wraper" wx:if="{{pageShow==1}}">
+	<view class="list-title">分类</view>
     <view class="list">
         <view class="item" wx:for="{{list}}" wx:key="key" catchtap="goDetail">
             <image src="{{item.imgUrl}}"></image>
