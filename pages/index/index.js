@@ -47,6 +47,72 @@ Page({
                 heart:0,
                 vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
             },
+            {
+                id:5,
+                showVideo:false,             //是否播放视频
+                title:'4他靠40道私房菜征服名流富豪',
+                time:'5月10日',
+                duration:'04:23',
+                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。',
+                imgUrl:'http://img0.daydaycook.com.cn/p/mo/mowjdyfqfz.jpg',
+                heart:0,
+                vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
+            },
+            {
+                id:6,
+                showVideo:false,             //是否播放视频
+                title:'4他靠40道私房菜征服名流富豪',
+                time:'5月10日',
+                duration:'04:23',
+                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。',
+                imgUrl:'http://img0.daydaycook.com.cn/p/mo/mowjdyfqfz.jpg',
+                heart:0,
+                vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
+            },
+            {
+                id:7,
+                showVideo:false,             //是否播放视频
+                title:'4他靠40道私房菜征服名流富豪',
+                time:'5月10日',
+                duration:'04:23',
+                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。',
+                imgUrl:'http://img0.daydaycook.com.cn/p/mo/mowjdyfqfz.jpg',
+                heart:0,
+                vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
+            },
+            {
+                id:8,
+                showVideo:false,             //是否播放视频
+                title:'4他靠40道私房菜征服名流富豪',
+                time:'5月10日',
+                duration:'04:23',
+                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。',
+                imgUrl:'http://img0.daydaycook.com.cn/p/mo/mowjdyfqfz.jpg',
+                heart:0,
+                vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
+            },
+            {
+                id:9,
+                showVideo:false,             //是否播放视频
+                title:'4他靠40道私房菜征服名流富豪',
+                time:'5月10日',
+                duration:'04:23',
+                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。',
+                imgUrl:'http://img0.daydaycook.com.cn/p/mo/mowjdyfqfz.jpg',
+                heart:0,
+                vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
+            },
+            {
+                id:10,
+                showVideo:false,             //是否播放视频
+                title:'4他靠40道私房菜征服名流富豪',
+                time:'5月10日',
+                duration:'04:23',
+                desc:'Steven出生于洛杉矶，是Rossoblu餐厅的老板兼大厨，他的妈妈是意大利人，因为对小时候在妈妈家乡吃到的菜念念不忘 ，他在28岁时，放弃做医生转行去学厨。',
+                imgUrl:'http://img0.daydaycook.com.cn/p/mo/mowjdyfqfz.jpg',
+                heart:0,
+                vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
+            },
         ]
     },
     onReachBottom(){
@@ -60,6 +126,12 @@ Page({
         list.map(item => item.showVideo = item.id == id?true:false)
         this.setData({
             list:list
+        })
+    },
+    goDetail(){
+        //跳转到详情页
+        wx.navigateTo({
+            url:'../c-detail/c-detail'
         })
     },
     goClassify(){

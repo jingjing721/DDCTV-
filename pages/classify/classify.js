@@ -5,8 +5,8 @@ Page({
         list:[
             {
                 id:1,
-                title:'假装很会吃',
-                desc:'美食教程',
+                title:'假装很会吃假装很会吃假装很会吃假装很会吃假装很会吃假装很会吃假装很会吃',
+                desc:'美食教程美食教程美食教程美食教程美食教程美食教程美食教程美食教程美食教程美食教程美食教程',
                 imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
             },
             {
@@ -38,7 +38,7 @@ Page({
     goDetail(){
         //跳转到详情页
         wx.navigateTo({
-            url:'../c-detail/c-detail'
+            url:'../list/list?cateId=1'
         })
     },
     onShow(){},
