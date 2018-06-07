@@ -1,0 +1,18 @@
+<view class="wraper" wx:if="{{pageShow==1}}">
+    <view class="item" wx:for="{{list}}" wx:key="key">
+        <view class="video">
+            <video wx:if="{{item.showVideo}}" autoplay objectFit="fill" src="{{item.vSource}}"></video>
+            <image wx:else src="{{item.imgUrl}}" catchtap="play" data-id="{{item.id}}"></image>
+            <view class="icon"></view>
+            <view class="time">03:23</view>
+        </view>
+        <view class="content">
+            <view class="title one-line" catchtap="goDetail">{{item.title}}</view>
+            <view class="desc" catchtap="goDetail">{{item.desc}}</view>
+            <view class="control">
+                <view class="left heart{{item.heart?' on':''}}">1029</view>
+                <view class="right go" catchtap="goDetail"></view>
+            </view>
+        </view>
+    </view>
+</view>
