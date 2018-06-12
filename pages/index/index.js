@@ -2,6 +2,8 @@ import util from '../../utils/util.js';
 Page({
     data:{
         pageShow:1,         //页面是否显示 0不显示  1显示
+        x:0,
+        y:0,
         list:[
             {
                 id:1,
@@ -114,6 +116,12 @@ Page({
                 vSource:'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400'
             },
         ]
+    },
+    test(e){
+        this.setData({
+            x:e.touches[0].clientX,
+            y:e.touches[0].clientY,
+        })
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页

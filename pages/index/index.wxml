@@ -1,4 +1,6 @@
 <view class="wraper" wx:if="{{pageShow==1}}">
+    <!-- 分类悬浮按钮 -->
+    <view class="classify" catchtap="goClassify">分类</view>
     <view class="list-title">今日十见</view>
     <view class="list">
         <view class="item" wx:for="{{list}}" wx:key="key">
@@ -18,7 +20,7 @@
                 </view>
             </view>
         </view>
+        <!-- 全部加载完毕 -->
+        <view class="end">我是有底线的</view>
     </view>
-    <!-- 分类悬浮按钮 -->
-    <view class="classify" catchtap="goClassify">分类</view>
 </view>

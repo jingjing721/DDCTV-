@@ -1,12 +1,11 @@
-let status = 0;    // 0 测试环境  1 生产环境
+let status = 0;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
 
-let ajaxUrl = status==0?'https://11111':'https://1111';
-
+let ajaxUrl  = status==0?'https://tv-d.daydaycook.com.cn':status==1?'https://tv-t.daydaycook.com.cn':status==2?'https://tv-s.daydaycook.com.cn':'https://tv.daydaycook.com.cn';              //用户、地址
 //通用Ajax请求接口
 let fetch = (_url,params,type) => {
     return new Promise(resolve => {
         wx.request({
-            url: _url,
+            url: ajaxUrl+_url,
             method: type || 'POST',
             data: params,
             complete(res){
