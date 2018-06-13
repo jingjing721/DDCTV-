@@ -154,6 +154,9 @@ Page({
         wx.setNavigationBarTitle({
             title:'DDCTV'
         })
+        wx.navigateTo({
+            url:'../login/login'
+        })
     },
     onShareAppMessage(){
         //转发分享

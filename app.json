@@ -2,6 +2,7 @@
     "pages":[
         "pages/index/index",
         "pages/list/list",
+        "pages/login/login",
         "pages/classify/classify",
         "pages/v-detail/v-detail",
         "pages/c-detail/c-detail"
