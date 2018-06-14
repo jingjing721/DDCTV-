@@ -1,7 +1,8 @@
-let status = 0;    // 0 测试环境  1 生产环境
+let status = 0;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
 
-let ajaxUrl = status==0?'https://11111':'https://1111';
-
+let ajaxUrl  = status==0?'https://tv-d.daydaycook.com.cn':status==1?'https://tv-t.daydaycook.com.cn':status==2?'https://tv-s.daydaycook.com.cn':'https://tv.daydaycook.com.cn';              //用户、地址
+let ajaxUrl2 = status==0?'https://uc-api-d.daydaycook.com.cn':status==1?'https://uc-api-t.daydaycook.com.cn':status==2?'https://uc-api-s.daydaycook.com.cn':'https://uc-api.daydaycook.com.cn';              //用户、地址
+ajaxUrl = "http://xuqing.natapp1.cc/";
 //通用Ajax请求接口
 let fetch = (_url,params,type) => {
     return new Promise(resolve => {
@@ -11,7 +12,7 @@ let fetch = (_url,params,type) => {
             data: params,
             complete(res){
                 if(res.statusCode == 200){
-                    resolve(res)
+                    resolve(res.data)
                 }else if(res.errMsg.indexOf('time') > -1 || res.errMsg.indexOf('cancel') > -1){
                     wx.hideToast();
                     wx.showModal({
@@ -28,6 +29,16 @@ let fetch = (_url,params,type) => {
             }
         })
     })
+}
+
+//将秒修改为需要显示的格式
+let changeTime = videoDuration => {
+    let m = parseInt(videoDuration/60);
+    let s = videoDuration - 60*m;
+    //确保两位数
+    m = m.toString().length < 2?'0'+m:m;
+    s = s.toString().length < 2?'0'+s:s;
+    return m+':'+s
 }
 
 //截取URL字符串
@@ -84,6 +95,8 @@ let isPhone = (number) => {
 }
 
 module.exports = {
+    ajaxUrl:ajaxUrl,
+    ajaxUrl2:ajaxUrl2,
     fetch:fetch,                            //封装Ajax
     getQueryString:getQueryString,          //截取URL参数
     add:add,                                //精确加法
@@ -91,4 +104,5 @@ module.exports = {
     accMul:accMul,                          //精确乘法
     accDiv:accDiv,                          //精确除法
     isPhone:isPhone,                        //判断手机号码是否合法
+    changeTime:changeTime,
 }

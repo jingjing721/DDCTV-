@@ -1,44 +1,30 @@
 import util from '../../utils/util.js';
 Page({
     data:{
-        pageShow:1,         //页面是否显示 0不显示  1显示
-        list:[
-            {
-                id:1,
-                title:'假装很会吃假装很会吃假装很会吃假装很会吃假装很会吃假装很会吃假装很会吃',
-                desc:'美食教程美食教程美食教程美食教程美食教程美食教程美食教程美食教程美食教程美食教程美食教程',
-                imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
-            },
-            {
-                id:2,
-                title:'假装很会吃',
-                desc:'美食教程',
-                imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
-            },
-            {
-                id:3,
-                title:'假装很会吃',
-                desc:'美食教程',
-                imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
-            },
-            {
-                id:4,
-                title:'假装很会吃',
-                desc:'美食教程',
-                imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
-            },
-            {
-                id:5,
-                title:'假装很会吃',
-                desc:'美食教程',
-                imgUrl:'http://p5gv26hso.bkt.clouddn.com/p/ee/eeyzohgwbp.png',
-            }
-        ]
+        list:[]
     },
-    goDetail(){
+    goDetail(e){
         //跳转到详情页
+        let id = e.currentTarget.dataset.id;
         wx.navigateTo({
-            url:'../list/list?cateId=1'
+            url:'../list/list?cateId='+id
+        })
+    },
+    init(){
+        //请求详情
+        let self = this;
+        util.fetch(util.ajaxUrl+'topic/list','').then(res => {
+            if(res && res.code == 0){
+                res.data.length = 8;
+                self.setData({
+                    list:res.data
+                })
+            }else{
+                wx.showModal({
+                    title:'温馨提示',
+                    content:res.message || '未知错误'
+                })
+            }
         })
     },
     onShow(){},
@@ -47,6 +33,7 @@ Page({
         wx.setNavigationBarTitle({
             title:'DDCTV'
         })
+        this.init();
     },
     onShareAppMessage(){
         //转发分享

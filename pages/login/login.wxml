@@ -1,0 +1,8 @@
+<view class="wraper">
+	<view class="title">需要使用你的微信昵称和头像</view>
+    <view class="btn">
+    	点击授权
+    	<button open-type="getUserInfo"></button>
+    	<button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo"></button>
+    </view>
+</view>
