@@ -1,72 +1,29 @@
-<view class="wraper" wx:if="{{pageShow==1}}">
-    <view class="video">
-        <image src="http://img0.daydaycook.com.cn/p/mo/mowjdyfqfz.jpg"></image>
-        <view class="icon"></view>
+<view class="wraper" wx:if="{{pageShown==1}}">
+    <view class="video" catchtap="play">
+        <video wx:if="{{play}}" autoplay objectFit="fill" src="{{video}}"></video>
+        <image src="{{smallPic}}" wx:if="{{!play}}"></image>
+        <view class="icon" wx:if="{{!play}}"></view>
     </view>
     <scroll-view scroll-y="true" class="content">
-        <view class="name two-line">7种夏日面条，一天一碗不重样</view>
-        <view class="tags"><text>#假装很会吃</text></view>
-        <view class="desc">面的软硬、粗细、质地的不同，煮面技巧也大有讲究,中式的湿面、干面、手擀面，还有日式的荞麦面、乌冬面，这里有个大盘点。</view>
-        <view class="material">
-            <view class="title">一般食材</view>
-            <view class="item">
-                <view class="left">白砂糖</view><view class="left">100clove</view>
-            </view>
-            <view class="item">
-                <view class="left">全脂牛奶</view><view class="left">800g</view>
-            </view>
-            <view class="item">
-                <view class="left">玉米淀粉</view><view class="left">28g</view>
-            </view>
-            <view class="item">
-                <view class="left">盐</view><view class="left">10g</view>
-            </view>
-            <view class="item">
-                <view class="left">鸡蛋</view><view class="left">2个</view>
-            </view>
-            <view class="item">
-                <view class="left">速溶咖啡</view><view class="left">10g</view>
+        <view class="name two-line">{{title}}</view>
+        <!-- <view class="tags"><text>#假装很会吃</text></view> -->
+        <view class="desc">{{summary}}</view>
+        <view class="material" wx:if="{{contentFoodList.length > 0}}">
+            <view class="title">食材</view>
+            <view class="item" wx:for="{{contentFoodList}}" wx:key="key">
+                <view class="left">{{item.name}}</view><view class="left">{{item.count}}</view>
             </view>
         </view>
-        <view class="material">
-            <view class="title">特殊食材</view>
-            <view class="item">
-                <view class="left">白砂糖</view><view class="left">100clove</view>
-            </view>
-            <view class="item">
-                <view class="left">鸡蛋</view><view class="left">2个</view>
-            </view>
-            <view class="item">
-                <view class="left">速溶咖啡</view><view class="left">10g</view>
-            </view>
-        </view>
-        <view class="step">
-            <view class="title">步骤1<text>/4</text></view>
+        <view class="step" wx:if="{{contentDetailList.length > 0}}" wx:for="{{contentDetailList}}" wx:key="key">
+            <view class="title">{{item.first}}<text>/{{item.last}}</text></view>
             <view class="main">
-                <view class="word">步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤</view>
-            </view>
-        </view>
-        <view class="step">
-            <view class="title">步骤2<text>/4</text></view>
-            <view class="main">
+                <view class="word">{{item.detail}}</view>
                 <view class="imgs">
-                    <image src="http://img0.daydaycook.com.cn/p/mo/mowjdyfqfz.jpg" mode="widthFix"></image>
+                    <image wx:if="{{item.image}}" src="{{item.image}}" mode="widthFix"></image>
                 </view>
             </view>
         </view>
-        <view class="step">
-            <view class="title">步骤3<text>/4</text></view>
-            <view class="main">
-                <view class="word">步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤</view>
-            </view>
-        </view>
-        <view class="step">
-            <view class="title">步骤4<text>/4</text></view>
-            <view class="main">
-                <view class="word">步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤步骤</view>
-            </view>
-        </view>
         <!-- 点赞 -->
-        <view class="praise{{heart?' on':''}}" catchtap="getHeart">1283</view>
+        <view class="praise{{heart?' on':''}}" catchtap="getHeart">{{likeCount}}</view>
     </scroll-view>
 </view>

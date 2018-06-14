@@ -4,11 +4,6 @@ Page({
     },
     onGotUserInfo(res){
         //获取code值
-        wx.showToast({
-            title:'加载中...',
-            icon:'loading',
-            duration:15000
-        })
         let self = this;
         wx.login({
             success(res2){
@@ -17,23 +12,22 @@ Page({
                         encryptedData:res.detail.encryptedData,
                         iv:res.detail.iv,
                         code:res2.code
-                    },'GET').then(xhr => {
-                        //获取sessionId后获取附近门店列表
-                        wx.hideToast();
-                        let res3 = xhr.data;
-                        console.log(res3)
-
-                        return
-                        if(res3 && res3.responseCode == 0){
-                            wx.setStorageSync('sessionId',res3.sessionId)
-                            wx.setStorageSync('statusMap',res3.statusMap)
-                            wx.navigateBack({
-                                delta:1
-                            })
+                    }).then(res3 => {
+                        if(res3 && res3.code == 1){
+                            console.log(res3.data.session)
                         }else{
+                            wx.hideToast();
+                            let msg;
+                            switch(res3.code){
+                                case(0):msg = '授权失败，请重试';break;
+                                case(2):msg = '请求参数错误';break;
+                                case(10011):msg = '微信用户获取失败';break;
+                                case(10012):msg = '微信用户注册失败';break;
+                                default:msg = '未知错误';
+                            }
                             wx.showModal({
                                 title:'温馨提示',
-                                content:res3.responseMsg || '未知错误'
+                                content:msg
                             })
                         }
                     })
