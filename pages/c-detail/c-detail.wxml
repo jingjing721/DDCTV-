@@ -1,8 +1,8 @@
 <view class="wraper" wx:if="{{pageShown==1}}">
-    <view class="video" catchtap="play">
-        <video wx:if="{{play}}" autoplay objectFit="fill" src="{{video}}"></video>
-        <image src="{{smallPic}}" wx:if="{{!play}}"></image>
-        <view class="icon" wx:if="{{!play}}"></view>
+    <view class="video">
+        <video wx:if="{{play && video}}" autoplay objectFit="fill" src="{{video}}"></video>
+        <image src="{{smallPic}}" wx:if="{{!play}}" catchtap="play"></image>
+        <view class="icon" wx:if="{{!play && video}}" catchtap="play"></view>
     </view>
     <scroll-view scroll-y="true" class="content">
         <view class="name two-line">{{title}}</view>
@@ -24,6 +24,9 @@
             </view>
         </view>
         <!-- 点赞 -->
-        <view class="praise{{heart?' on':''}}" catchtap="getHeart">{{likeCount}}</view>
+        <view class="praise{{isLike?' on':''}}" catchtap="getHeart">
+        {{likeCount}}
+        <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-id="{{item.id}}"></button>
+    </view>
     </scroll-view>
 </view>

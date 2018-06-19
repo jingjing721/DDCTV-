@@ -5,17 +5,20 @@
     <view class="list">
         <view class="item" wx:for="{{list}}" wx:key="key" wx:if="{{item.state==1}}">
             <view class="video">
-                <video wx:if="{{item.showVideo}}" autoplay objectFit="fill" src="{{item.video}}"></video>
+                <video wx:if="{{item.showVideo && item.video}}" autoplay objectFit="fill" src="{{item.video}}"></video>
                 <image wx:else src="{{item.smallPic}}" catchtap="play" data-id="{{item.id}}"></image>
-                <view class="icon" wx:if="{{!item.showVideo}}" catchtap="play" data-id="{{item.id}}"></view>
-                <view class="time">{{item.videoDuration}}</view>
+                <view class="icon" wx:if="{{!item.showVideo && item.video}}" catchtap="play" data-id="{{item.id}}"></view>
+                <view class="time" wx:if="{{item.video}}">{{item.videoDuration}}</view>
                 <view class="num"><view class="inner"></view></view>
             </view>
             <view class="content">
                 <view class="title one-line" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.title}}</view>
                 <view class="desc" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.summary}}</view>
                 <view class="control">
-                    <view class="left heart{{item.heart?' on':''}}">{{item.likeCount}}</view>
+                    <view class="left heart{{item.isLike?' on':''}}" catchtap="goHeart" data-id="{{item.id}}">
+                        {{item.likeCount}}
+                        <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-id="{{item.id}}"></button>
+                    </view>
                     <view class="right go" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}"></view>
                 </view>
             </view>

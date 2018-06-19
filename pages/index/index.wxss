@@ -190,6 +190,15 @@
 	line-height: 32rpx;
 	position: relative;
 	padding:30rpx 30rpx 30rpx 38rpx;
+	border:0;
+}
+.item .content .control .heart button{
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom:0;
+	opacity: 0;
 }
 .item .content .control .heart::before{
 	content:'';

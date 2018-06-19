@@ -6,14 +6,15 @@ Page({
     goDetail(e){
         //跳转到详情页
         let id = e.currentTarget.dataset.id;
+        let title = e.currentTarget.dataset.title;
         wx.navigateTo({
-            url:'../list/list?cateId='+id
+            url:'../list/list?cateId='+id+'&title='+title
         })
     },
     init(){
         //请求详情
         let self = this;
-        util.fetch(util.ajaxUrl+'topic/list','').then(res => {
+        util.fetch(util.ajaxUrl+'topic/list',{sessionId:''}).then(res => {
             if(res && res.code == 0){
                 res.data.length = 8;
                 self.setData({
