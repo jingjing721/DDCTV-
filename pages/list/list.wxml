@@ -21,6 +21,6 @@
             </view>
         </view>
         <!-- 全部加载完毕 -->
-        <view class="end" wx:if="{{end}}">我是有底线的</view>
+        <view class="end" wx:if="{{!next}}">我是有底线的</view>
     </view>
 </view>

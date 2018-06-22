@@ -157,6 +157,7 @@
 }
 
 .praise{
+	position: relative;
 	width: 200rpx;
 	margin:0 auto;
 	height: 100rpx;

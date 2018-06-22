@@ -1,14 +1,42 @@
 import util from '../../utils/util.js';
 Page({
     data:{
-        pageShow:1,         //页面是否显示 0不显示  1显示
+        pageShow:1,           //页面是否显示 0不显示  1显示
         list:[],
-        end:false,          //是否加载完毕
-        sessionId:'',       //若sessionId值为空，则没登录，否则已登录
+        sessionId:'',         //若sessionId值为空，则没登录，否则已登录
+        myDate:+new Date(),   //请求日期
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
         console.log('加载下一页')
+        let self = this;
+        if(self.data.myDate) self.init();
+    },
+    init(){
+        //页面初始化，请求每日十件
+        let self = this;
+        util.fetch(util.ajaxUrl+'top-content/list',{
+            date:self.data.myDate,
+            sessionId:self.data.sessionId
+        }).then(res => {
+            if(res && res.code == 0){
+                let list = [];
+                res.data.map((item,index) => {
+                    item.showVideo = false;     //默认不显示视频
+                    item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
+                    list.push(item)
+                })
+                self.setData({
+                    list:list,
+                    myDate:res.lastDate?res.lastDate:''
+                })
+            }else{
+                wx.showModal({
+                    title:'温馨提示',
+                    content:res.message || '未知错误'
+                })
+            }
+        })
     },
     goHeart(e,from){
         //点赞
@@ -129,29 +157,6 @@ Page({
             }
         })
     },
-    init(){
-        //页面初始化，请求每日十件
-        let self = this;
-        util.fetch(util.ajaxUrl+'top-content/list',{
-            date:+new Date(),
-            sessionId:self.data.sessionId
-        }).then(res => {
-            if(res && res.code == 0){
-                res.data.map((item,index) => {
-                    item.showVideo = false;     //默认不显示视频
-                    item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
-                })
-                self.setData({
-                    list:res.data
-                })
-            }else{
-                wx.showModal({
-                    title:'温馨提示',
-                    content:res.message || '未知错误'
-                })
-            }
-        })
-    },
     play(e){
         //是否播放
         let id = e.currentTarget.dataset.id;
@@ -160,6 +165,11 @@ Page({
         this.setData({
             list:list
         })
+        //若无视频地址，则跳转
+        let _filter = list.filter(item => item.id == id)[0];
+        if(!_filter.video){
+            this.goDetail(e)
+        }
     },
     goDetail(e){
         //跳转到详情页
@@ -184,7 +194,50 @@ Page({
             url:'../classify/classify'
         })
     },
-    onShow(){},
+    refreshLikeCount(){
+        //更新点赞数量
+        let self = this;
+        let sessionId = wx.getStorageSync('sessionId');
+        if(sessionId){
+            self.setData({
+                sessionId:sessionId
+            })
+        }
+        if(self.data.list.length > 0){
+            let idList = [];
+            self.data.list.map(item => {
+                idList.push({
+                    businessCategoryId:item.businessCategoryId,
+                    contentId:item.id
+                })
+            })
+            util.fetch(util.ajaxUrl+'top-content/likeCount',{
+                idList:idList,
+                sessionId:self.data.sessionId
+            }).then(res => {
+                if(res && res.code == 0){
+                    //更新list数据
+                    let list = self.data.list;
+                    list.map(item => {
+                        let _filter = res.data.filter(ele => ele.contentId == item.id)[0];
+                        item.isLike = _filter.isLike;
+                        item.likeCount = _filter.count;
+                    })
+                    self.setData({
+                        list:list
+                    })
+                }else{
+                    wx.showModal({
+                        title:'温馨提示',
+                        content:res.message || '未知错误'
+                    })
+                }
+            })
+        }
+    },
+    onShow(){
+        this.refreshLikeCount();
+    },
     onLoad(e){
         let self = this;
         //设置页面标题

@@ -8,10 +8,18 @@
     	<view class="title two-line">{{title}}</view>
     	<!-- <view class="tags"><text>#假装很会吃</text></view> -->
     	<view class="main">{{summary}}</view>
+        <view class="list">
+            <view class="item" wx:for="{{contentDetailList}}" wx:key="key" wx:if="{{contentDetailList.length>0}}">
+                <view class="word" wx:if="{{item.detail}}">{{item.detail}}</view>
+                <view class="img" wx:if="{{item.image}}">
+                    <image src="{{item.image}}" mode="widthFix"></image>
+                </view>
+            </view>
+        </view>
+        <!-- 点赞 -->
+        <view class="praise{{isLike?' on':''}}" catchtap="getHeart">
+            {{likeCount}}
+            <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-id="{{item.id}}"></button>
+        </view>
     </scroll-view>
-    <!-- 点赞 -->
-    <view class="praise{{isLike?' on':''}}" catchtap="getHeart">
-        {{likeCount}}
-        <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-id="{{item.id}}"></button>
-    </view>
 </view>

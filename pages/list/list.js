@@ -3,11 +3,51 @@ Page({
     data:{
         pageShow:1,         //页面是否显示 0不显示  1显示
         cateId:0,           //分类ID
-        list:[]
+        list:[],
+        page:1,             //页数
+        next:true,          //是否可以加载下一页
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
         console.log('加载下一页')
+        let self = this;
+        if(self.data.next) self.init();
+    },
+    init(){
+        //初始化页面
+        let self = this;
+        util.fetch(util.ajaxUrl+'topic/list-content',{
+            page:self.data.page,
+            rows:10,
+            topcId:self.data.cateId,
+            sessionId:self.data.sessionId
+        }).then(res => {
+            self.setData({
+                page:self.data.page+1
+            })
+            if(res && res.code == 0){
+                let list = self.data.list;
+                res.data.map((item,index) => {
+                    item.showVideo = false;     //默认不显示视频
+                    item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
+                    list.push(item)
+                })
+                if(res.data.length == 0){
+                    //若无数据，则禁止显示下一页
+                    self.setData({
+                        next:false
+                    })
+                }
+                self.setData({
+                    list:list
+                })
+            }else{
+                wx.showModal({
+                    title:'温馨提示',
+                    content:res.message || '未知错误'
+                })
+            }
+        })
     },
     goDetail(e){
         //跳转到详情页
@@ -155,32 +195,6 @@ Page({
                 wx.showModal({
                     title:'温馨提示',
                     content:'授权失败，请稍后再试！'
-                })
-            }
-        })
-    },
-    init(){
-        //初始化页面
-        let self = this;
-        util.fetch(util.ajaxUrl+'topic/list-content',{
-            page:1,
-            rows:10,
-            topcId:self.data.cateId,
-            topcId:7,
-            sessionId:self.data.sessionId
-        }).then(res => {
-            if(res && res.code == 0){
-                res.data.map((item,index) => {
-                    item.showVideo = false;     //默认不显示视频
-                    item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
-                })
-                self.setData({
-                    list:res.data
-                })
-            }else{
-                wx.showModal({
-                    title:'温馨提示',
-                    content:res.message || '未知错误'
                 })
             }
         })
