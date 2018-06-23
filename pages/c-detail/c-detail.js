@@ -138,6 +138,9 @@ Page({
                             item.last = item.groupTitle.split('/')[1];
                         })
                     }
+                    wx.setNavigationBarTitle({
+                        title:res.data.title
+                    })
                     self.setData({
                         smallPic:res.data.smallPic,
                         likeCount:res.data.likeCount,

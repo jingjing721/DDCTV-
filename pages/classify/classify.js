@@ -32,7 +32,7 @@ Page({
     onLoad(e){
         //设置页面标题
         wx.setNavigationBarTitle({
-            title:'DDCTV'
+            title:'分类'
         })
         this.init();
     },

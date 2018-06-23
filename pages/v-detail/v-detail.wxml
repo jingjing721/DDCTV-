@@ -1,10 +1,13 @@
 <view class="wraper" wx:if="{{pageShown==1}}">
-    <view class="video">
+    <view class="video" wx:if="{{video}}">
         <video wx:if="{{play && video}}" autoplay objectFit="fill" src="{{video}}"></video>
         <image src="{{smallPic}}" wx:if="{{!play}}" catchtap="play"></image>
         <view class="icon" wx:if="{{!play && video}}" catchtap="play"></view>
     </view>
-    <scroll-view scroll-y="true" class="content">
+    <scroll-view scroll-y="true" class="content{{!video?' top':''}}">
+        <view class="video2" wx:if="{{!video}}">
+            <image src="{{smallPic}}"></image>
+        </view>
     	<view class="title two-line">{{title}}</view>
     	<!-- <view class="tags"><text>#假装很会吃</text></view> -->
     	<view class="main">{{summary}}</view>

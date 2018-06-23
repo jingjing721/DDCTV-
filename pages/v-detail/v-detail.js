@@ -130,6 +130,9 @@ Page({
         }).then(res => {
             if(res && res.code == 0){
                 if(res && res.code == 0){
+                    wx.setNavigationBarTitle({
+                        title:res.data.title
+                    })
                     self.setData({
                         smallPic:res.data.smallPic,
                         likeCount:res.data.likeCount,

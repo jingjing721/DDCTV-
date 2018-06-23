@@ -1,8 +1,11 @@
 import util from '../../utils/util.js';
+let init = true;            //是否第一次请求
+let indexId = 0;
 Page({
     data:{
         pageShow:1,           //页面是否显示 0不显示  1显示
-        list:[],
+        currentList:[],       //当天列表
+        historyList:[],       //历史列表
         sessionId:'',         //若sessionId值为空，则没登录，否则已登录
         myDate:+new Date(),   //请求日期
     },
@@ -10,6 +13,7 @@ Page({
         //页面滚动到底部，加载下一页
         console.log('加载下一页')
         let self = this;
+        init = false;
         if(self.data.myDate) self.init();
     },
     init(){
@@ -20,16 +24,70 @@ Page({
             sessionId:self.data.sessionId
         }).then(res => {
             if(res && res.code == 0){
-                let list = [];
-                res.data.map((item,index) => {
-                    item.showVideo = false;     //默认不显示视频
-                    item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
-                    list.push(item)
-                })
-                self.setData({
-                    list:list,
-                    myDate:res.lastDate?res.lastDate:''
-                })
+                if(init){
+                    //当天列表
+                    let currentList = [];
+                    res.data.map((item,index) => {
+                        indexId++
+                        item.indexId = indexId;
+                        item.showVideo = false;     //默认不显示视频
+                        item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
+                        currentList.push(item)
+                    })
+                    self.setData({
+                        currentList:currentList,
+                        myDate:res.lastDate?res.lastDate:''
+                    })
+                }else{
+                    //历史列表
+                    let historyList = self.data.historyList;
+                    if(res.data.length > 0){
+                        //追加标题
+                        let myDate = new Date(self.data.myDate);
+                        let m = (() => {
+                            let r = '';
+                            let m = myDate.getMonth()+1;
+                            switch(m){
+                                case(1):r = '一';break;
+                                case(2):r = '二';break;
+                                case(3):r = '三';break;
+                                case(4):r = '四';break;
+                                case(5):r = '五';break;
+                                case(6):r = '六';break;
+                                case(7):r = '七';break;
+                                case(8):r = '八';break;
+                                case(9):r = '九';break;
+                                case(10):r = '十';break;
+                                case(11):r = '十一';break;
+                                case(12):r = '十二';break;
+                                default:r = '一';break;
+                            }
+                            return r
+                        })()
+                        historyList.push({
+                            listTitle:self.data.myDate,
+                            y:myDate.getFullYear(),
+                            m:m,
+                            d:myDate.getDate(),
+                        })
+                    }
+                    res.data.map((item,index) => {
+                        indexId++;
+                        item.indexId = indexId;
+                        item.showVideo = false;     //默认不显示视频
+                        item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
+                        historyList.push(item)
+                    })
+                    self.setData({
+                        historyList:historyList,
+                        myDate:res.lastDate?res.lastDate:''
+                    })
+                }
+                //若当天请求没数据，则显示前一天的
+                if(self.data.currentList.length == 0 && self.data.myDate && init){
+                    init = false;
+                    self.init()
+                }
             }else{
                 wx.showModal({
                     title:'温馨提示',
@@ -42,13 +100,18 @@ Page({
         //点赞
         let self = this;
         let id = e.currentTarget.dataset.id;
-        let _filter = self.data.list.filter(item => item.id == id)[0];
+        let _filter = self.data.currentList.filter(item => item.id == id);
+        if(_filter.length > 0){
+            _filter = _filter[0];
+        }else{
+            _filter = self.data.historyList.filter(item => item.id == id)[0];
+        }
 
         if(self.data.sessionId){
             //优先反应
-            let list = self.data.list;
+            let currentList = self.data.currentList;
             if(!from){
-                list.map(item => {
+                currentList.map(item => {
                     if(item.id == id){
                         if(_filter.isLike==0){
                             //点赞
@@ -63,7 +126,29 @@ Page({
                     }
                 })
                 self.setData({
-                    list:list
+                    currentList:currentList
+                })
+            }
+
+
+            let historyList = self.data.historyList;
+            if(!from){
+                historyList.map(item => {
+                    if(item.id == id){
+                        if(_filter.isLike==0){
+                            //点赞
+                            item.isLike = 1;
+                            item.likeCount++;
+                        }else{
+                            //取消点赞
+                            item.isLike = 0;
+                            item.likeCount--;
+                            if(item.likeCount <= 0) item.likeCount = 0;
+                        }
+                    }
+                })
+                self.setData({
+                    historyList:historyList
                 })
             }
 
@@ -73,14 +158,21 @@ Page({
                 if(res){
                     //点赞成功(获取真实点赞数据)
                     // console.log(res)
-                    list.map(item => {
+                    currentList.map(item => {
+                        if(item.id == id){
+                            item.isLike = res.data.isLike;
+                            item.likeCount = res.data.likeCount;
+                        }
+                    })
+                    historyList.map(item => {
                         if(item.id == id){
                             item.isLike = res.data.isLike;
                             item.likeCount = res.data.likeCount;
                         }
                     })
                     self.setData({
-                        list:list
+                        currentList:currentList,
+                        historyList:historyList
                     })
                 }
             })
@@ -160,13 +252,22 @@ Page({
     play(e){
         //是否播放
         let id = e.currentTarget.dataset.id;
-        let list = this.data.list;
-        list.map(item => item.showVideo = item.id == id?true:false)
+        let indexId = e.currentTarget.dataset.indexid;
+        let currentList = this.data.currentList;
+        let historyList = this.data.historyList;
+        currentList.map(item => item.showVideo = item.indexId == indexId?true:false)
+        historyList.map(item => item.showVideo = item.indexId == indexId?true:false)
         this.setData({
-            list:list
+            currentList:currentList,
+            historyList:historyList
         })
         //若无视频地址，则跳转
-        let _filter = list.filter(item => item.id == id)[0];
+        let _filter = currentList.filter(item => item.indexId == indexId);
+        if(_filter.length > 0){
+            _filter = _filter[0];
+        }else{
+            _filter = historyList.filter(item => item.indexId == indexId)[0]
+        }
         if(!_filter.video){
             this.goDetail(e)
         }
@@ -175,7 +276,12 @@ Page({
         //跳转到详情页
         let id = e.currentTarget.dataset.id;
         let businessCategoryId = e.currentTarget.dataset.businesscategoryid;
-        let _item = this.data.list.filter(item => item.id == id)[0];
+        let _item = this.data.currentList.filter(item => item.id == id);
+        if(_item.length > 0){
+            _item = _item[0]
+        }else{
+            _item = this.data.historyList.filter(item => item.id == id)[0]
+        }
         if(_item.type == 1){
             //图文
             wx.navigateTo({
@@ -203,13 +309,16 @@ Page({
                 sessionId:sessionId
             })
         }
-        if(self.data.list.length > 0){
+        if(self.data.currentList.length > 0 || self.data.historyList.length > 0){
+            let list = self.data.currentList.concat(self.data.historyList);
             let idList = [];
-            self.data.list.map(item => {
-                idList.push({
-                    businessCategoryId:item.businessCategoryId,
-                    contentId:item.id
-                })
+            list.map(item => {
+                if(item.id){
+                    idList.push({
+                        businessCategoryId:item.businessCategoryId,
+                        contentId:item.id
+                    })
+                }
             })
             util.fetch(util.ajaxUrl+'top-content/likeCount',{
                 idList:idList,
@@ -217,14 +326,25 @@ Page({
             }).then(res => {
                 if(res && res.code == 0){
                     //更新list数据
-                    let list = self.data.list;
-                    list.map(item => {
-                        let _filter = res.data.filter(ele => ele.contentId == item.id)[0];
-                        item.isLike = _filter.isLike;
-                        item.likeCount = _filter.count;
+                    let currentList = self.data.currentList;
+                    let historyList = self.data.historyList;
+                    currentList.map(item => {
+                        if(item.id){
+                            let _filter = res.data.filter(ele => ele.contentId == item.id)[0];
+                            item.isLike = _filter.isLike;
+                            item.likeCount = _filter.count;
+                        }
+                    })
+                    historyList.map(item => {
+                        if(item.id){
+                            let _filter = res.data.filter(ele => ele.contentId == item.id)[0];
+                            item.isLike = _filter.isLike;
+                            item.likeCount = _filter.count;
+                        }
                     })
                     self.setData({
-                        list:list
+                        currentList:currentList,
+                        historyList:historyList
                     })
                 }else{
                     wx.showModal({
@@ -236,6 +356,9 @@ Page({
         }
     },
     onShow(){
+        this.setData({
+            myDate:+new Date()
+        })
         this.refreshLikeCount();
     },
     onLoad(e){
