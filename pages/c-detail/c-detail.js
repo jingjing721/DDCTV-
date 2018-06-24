@@ -87,12 +87,13 @@ Page({
                                         title:'温馨提示',
                                         content:'检测到您没打开授权权限，是否去设置打开？',
                                         complete(){
-                                            wx.openSetting({
-                                                complete(){
-                                                    //重新授权
-                                                    // self.onGotUserInfo()
-                                                }
-                                            })
+                                            if(res && res.confirm){
+                                                wx.openSetting({
+                                                    complete(){
+                                                        // self.onGotUserInfo()
+                                                    }
+                                                })
+                                            }
                                         }
                                     })
                                 }

@@ -31,6 +31,7 @@
 	padding-bottom: 44rpx;
 	margin-top: -26rpx;
 	position: relative;
+	overflow: hidden;
 }
 .end::after{
 	content:'';

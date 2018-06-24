@@ -1,6 +1,6 @@
 import util from '../../utils/util.js';
-let init = true;            //是否第一次请求
-let indexId = 0;
+// let init = true;            //是否第一次请求
+// let indexId = 0;
 Page({
     data:{
         pageShow:1,           //页面是否显示 0不显示  1显示
@@ -8,12 +8,16 @@ Page({
         historyList:[],       //历史列表
         sessionId:'',         //若sessionId值为空，则没登录，否则已登录
         myDate:+new Date(),   //请求日期
+        init:true,
+        indexId:0,
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
         console.log('加载下一页')
         let self = this;
-        init = false;
+        self.setData({
+            init:false
+        })
         if(self.data.myDate) self.init();
     },
     init(){
@@ -24,12 +28,14 @@ Page({
             sessionId:self.data.sessionId
         }).then(res => {
             if(res && res.code == 0){
-                if(init){
+                if(self.data.init){
                     //当天列表
                     let currentList = [];
                     res.data.map((item,index) => {
-                        indexId++
-                        item.indexId = indexId;
+                        self.setData({
+                            indexId:self.data.indexId+1
+                        })
+                        item.indexId = self.data.indexId;
                         item.showVideo = false;     //默认不显示视频
                         item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
                         currentList.push(item)
@@ -72,8 +78,10 @@ Page({
                         })
                     }
                     res.data.map((item,index) => {
-                        indexId++;
-                        item.indexId = indexId;
+                        self.setData({
+                            indexId:self.data.indexId+1
+                        })
+                        item.indexId = self.data.indexId;
                         item.showVideo = false;     //默认不显示视频
                         item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
                         historyList.push(item)
@@ -84,8 +92,10 @@ Page({
                     })
                 }
                 //若当天请求没数据，则显示前一天的
-                if(self.data.currentList.length == 0 && self.data.myDate && init){
-                    init = false;
+                if(self.data.currentList.length == 0 && self.data.myDate && self.data.init){
+                    self.setData({
+                        init:false
+                    })
                     self.init()
                 }
             }else{
@@ -108,6 +118,10 @@ Page({
         }
 
         if(self.data.sessionId){
+            //统计点赞
+            wx.reportAnalytics('click', {
+                click: 'isLike',
+            });
             //优先反应
             let currentList = self.data.currentList;
             if(!from){
@@ -220,13 +234,14 @@ Page({
                                     wx.showModal({
                                         title:'温馨提示',
                                         content:'检测到您没打开授权权限，是否去设置打开？',
-                                        complete(){
-                                            wx.openSetting({
-                                                complete(){
-                                                    //重新授权
-                                                    // self.onGotUserInfo()
-                                                }
-                                            })
+                                        complete(res){
+                                            if(res && res.confirm){
+                                                wx.openSetting({
+                                                    complete(){
+                                                        // self.onGotUserInfo()
+                                                    }
+                                                })
+                                            }
                                         }
                                     })
                                 }
@@ -356,9 +371,6 @@ Page({
         }
     },
     onShow(){
-        this.setData({
-            myDate:+new Date()
-        })
         this.refreshLikeCount();
     },
     onLoad(e){
