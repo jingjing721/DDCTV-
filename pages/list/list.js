@@ -205,7 +205,54 @@ Page({
             url:'../classify/classify'
         })
     },
-    onShow(){},
+    refreshLikeCount(){
+        //更新点赞数量
+        let self = this;
+        let sessionId = wx.getStorageSync('sessionId');
+        if(sessionId){
+            self.setData({
+                sessionId:sessionId
+            })
+        }
+        if(self.data.list.length > 0){
+            let list = self.data.list;
+            let idList = [];
+            list.map(item => {
+                if(item.id){
+                    idList.push({
+                        businessCategoryId:item.businessCategoryId,
+                        contentId:item.id
+                    })
+                }
+            })
+            util.fetch(util.ajaxUrl+'top-content/likeCount',{
+                idList:idList,
+                sessionId:self.data.sessionId
+            }).then(res => {
+                if(res && res.code == 0){
+                    //更新list数据
+                    list.map(item => {
+                        if(item.id){
+                            let _filter = res.data.filter(ele => ele.contentId == item.id)[0];
+                            item.isLike = _filter.isLike;
+                            item.likeCount = _filter.count;
+                        }
+                    })
+                    self.setData({
+                        list:list
+                    })
+                }else{
+                    wx.showModal({
+                        title:'温馨提示',
+                        content:res.message || '未知错误'
+                    })
+                }
+            })
+        }
+    },
+    onShow(){
+        this.refreshLikeCount();
+    },
     onLoad(e){
         //设置页面标题
         let self = this;

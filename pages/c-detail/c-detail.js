@@ -13,6 +13,11 @@ Page({
         //点赞
         let self = this;
         if(self.data.sessionId){
+            wx.showToast({
+                title:'',
+                icon:'loading',
+                duration:15000
+            })
             //先渲染页面
             if(!from){
                 if(self.data.isLike){
@@ -34,6 +39,7 @@ Page({
             //提交后台
             util.getHeart(self.data.businessCategoryId,self.data.id,self.data.sessionId)
             .then(res => {
+                wx.hideToast();
                 if(res){
                     //点赞成功(获取真实点赞数据)
                     self.setData({
@@ -131,6 +137,7 @@ Page({
             sessionId:self.data.sessionId,
             businessCategoryId:self.data.businessCategoryId
         }).then(res => {
+            wx.hideToast();
             if(res && res.code == 0){
                 if(res && res.code == 0){
                     if(res.data.contentDetailList){
@@ -171,6 +178,11 @@ Page({
     onShow(){},
     onLoad(e){
         let self = this;
+        wx.showToast({
+            title:'',
+            icon:'loading',
+            duration:15000
+        })
         self.setData({
             businessCategoryId:Number(e.businessCategoryId),
             id:Number(e.id)

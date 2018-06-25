@@ -26,10 +26,10 @@
                 </view>
             </view>
         </view>
-        <!-- 点赞 -->
-        <view class="praise{{isLike?' on':''}}" catchtap="getHeart">
+    </scroll-view>
+    <!-- 点赞 -->
+    <view class="praise{{isLike?' on':''}}" catchtap="getHeart">
         {{likeCount}}
         <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-id="{{item.id}}"></button>
     </view>
-    </scroll-view>
 </view>

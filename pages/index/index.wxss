@@ -181,7 +181,7 @@
 	font-family: arial;
 	color: #a5a4a4;
 	overflow:hidden;
-	padding-bottom: 50rpx;
+	padding-bottom: 60rpx;
 }
 .item .content .control .heart{
 	height: 32rpx;

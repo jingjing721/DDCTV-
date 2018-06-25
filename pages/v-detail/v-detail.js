@@ -11,6 +11,11 @@ Page({
         //点赞
         let self = this;
         if(self.data.sessionId){
+            wx.showToast({
+                title:'',
+                icon:'loading',
+                duration:15000
+            })
             //先渲染页面
             if(!from){
                 if(self.data.isLike){
@@ -32,6 +37,7 @@ Page({
             //提交后台
             util.getHeart(self.data.businessCategoryId,self.data.id,self.data.sessionId)
             .then(res => {
+                wx.hideToast();
                 if(res){
                     //点赞成功(获取真实点赞数据)
                     self.setData({
@@ -53,6 +59,7 @@ Page({
                         iv:res.detail.iv,
                         code:res2.code
                     }).then(res3 => {
+                        wx.hideToast();
                         if(res3 && res3.code == 1){
                             wx.setStorageSync('sessionId',res3.data.session);
                             self.setData({
@@ -60,7 +67,6 @@ Page({
                             })
                             self.getHeart(1)
                         }else{
-                            wx.hideToast();
                             let msg;
                             switch(res3.code){
                                 case(0):msg = '获取失败，请重试';break;
@@ -129,6 +135,7 @@ Page({
             businessCategoryId:self.data.businessCategoryId,
             sessionId:self.data.sessionId
         }).then(res => {
+            wx.hideToast();
             if(res && res.code == 0){
                 if(res && res.code == 0){
                     wx.setNavigationBarTitle({
@@ -162,6 +169,11 @@ Page({
     onShow(){},
     onLoad(e){
         let self = this;
+        wx.showToast({
+            title:'',
+            icon:'loading',
+            duration:15000
+        })
         self.setData({
             businessCategoryId:Number(e.businessCategoryId),
             id:Number(e.id)

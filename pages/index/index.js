@@ -119,6 +119,11 @@ Page({
 
         if(self.data.sessionId){
             //统计点赞
+            wx.showToast({
+                title:'',
+                icon:'loading',
+                duration:15000
+            })
             wx.reportAnalytics('click', {
                 click: 'isLike',
             });
@@ -169,6 +174,7 @@ Page({
             //提交后台
             util.getHeart(_filter.businessCategoryId,id,self.data.sessionId)
             .then(res => {
+                wx.hideToast();
                 if(res){
                     //点赞成功(获取真实点赞数据)
                     // console.log(res)
@@ -198,11 +204,17 @@ Page({
         wx.login({
             success(res2){
                 if(res.detail.errMsg.indexOf('ok') > -1){
+                    wx.showToast({
+                        title:'',
+                        icon:'loading',
+                        duration:15000
+                    })
                     util.fetch(util.ajaxUrl2+'/mini/auth',{
                         encryptedData:res.detail.encryptedData,
                         iv:res.detail.iv,
                         code:res2.code
                     }).then(res3 => {
+                        wx.hideToast();
                         if(res3 && res3.code == 1){
                             wx.setStorageSync('sessionId',res3.data.session);
                             self.setData({
@@ -210,7 +222,6 @@ Page({
                             })
                             self.goHeart(res,1)
                         }else{
-                            wx.hideToast();
                             let msg;
                             switch(res3.code){
                                 case(0):msg = '获取失败，请重试';break;

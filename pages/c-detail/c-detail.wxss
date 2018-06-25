@@ -167,9 +167,11 @@
 }
 
 .praise{
-	position: relative;
+	position: fixed;
+	left: 50%;
+	bottom: 0;
+	margin-left: -100rpx;
 	width: 200rpx;
-	margin:0 auto;
 	height: 100rpx;
 	padding-top: 100rpx;
 	border-radius: 50%;
@@ -185,6 +187,7 @@
 	-ms-transition: all 0.2s linear;
 	-o-transition: all 0.2s linear;
 	transition: all 0.2s linear;
+	z-index: 10000;
 }
 .praise button{
 	position: absolute;
