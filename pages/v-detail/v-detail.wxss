@@ -128,6 +128,9 @@
 	margin:20rpx 0;
 	width: 100%;
 }
+.list .item:last-child{
+	padding-bottom: 60rpx;
+}
 
 
 

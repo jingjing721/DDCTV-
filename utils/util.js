@@ -1,4 +1,4 @@
-let status = 3;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
+let status = 1;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
 
 let ajaxUrl  = status==0?'https://tv-d.daydaycook.com.cn/':status==1?'https://tv-t.daydaycook.com.cn/':status==2?'https://tv-s.daydaycook.com.cn/':'https://tv.daydaycook.com.cn/';              //用户、地址
 let ajaxUrl2 = status==0?'https://uc-api-d.daydaycook.com.cn':status==1?'https://uc-api-t.daydaycook.com.cn':status==2?'https://uc-api-s.daydaycook.com.cn':'https://uc-api.daydaycook.com.cn';              //用户、地址

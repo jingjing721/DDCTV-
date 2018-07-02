@@ -22,6 +22,7 @@ Page({
             topcId:self.data.cateId,
             sessionId:self.data.sessionId
         }).then(res => {
+            wx.hideToast();
             self.setData({
                 page:self.data.page+1
             })
@@ -261,6 +262,11 @@ Page({
         })
         wx.setNavigationBarTitle({
             title:e.title?e.title:'DDCTV'
+        })
+        wx.showToast({
+            title:'',
+            icon:'loading',
+            duration:15000
         })
         //优先判断用户是否已登录
         util.isLogin().then(sessionId => {

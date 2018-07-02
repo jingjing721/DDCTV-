@@ -10,7 +10,7 @@
                 <image wx:else src="{{item.smallPic}}" catchtap="play" data-businessCategoryId="{{item.businessCategoryId}}" data-indexId="{{item.indexId}}" data-id="{{item.id}}"></image>
                 <view class="icon" wx:if="{{!item.showVideo && item.video}}" catchtap="play"  data-indexId="{{item.indexId}}" data-id="{{item.id}}"></view>
                 <view class="time" wx:if="{{!item.showVideo && item.video}}">{{item.videoDuration}}</view>
-                <view class="num" wx:if="{{!item.showVideo && item.video}}"><view class="inner"></view></view>
+                <view class="num" wx:if="{{!item.showVideo}}"><view class="inner"></view></view>
             </view>
             <view class="content">
                 <view class="title one-line" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.title}}</view>

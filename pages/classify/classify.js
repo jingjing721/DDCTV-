@@ -14,7 +14,13 @@ Page({
     init(){
         //请求详情
         let self = this;
+        wx.showToast({
+            title:'',
+            icon:'loading',
+            duration:15000
+        })
         util.fetch(util.ajaxUrl+'topic/list',{sessionId:''}).then(res => {
+            wx.hideToast();
             if(res && res.code == 0){
                 res.data.length = 8;
                 self.setData({

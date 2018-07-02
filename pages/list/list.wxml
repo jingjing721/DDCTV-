@@ -4,8 +4,8 @@
         <view class="item" wx:for="{{list}}" wx:key="key" wx:if="{{item.state==1}}">
             <view class="video">
                 <video wx:if="{{item.showVideo && item.video}}" autoplay objectFit="fill" src="{{item.video}}"></video>
-                <image wx:else src="{{item.smallPic}}" catchtap="play" data-id="{{item.id}}"></image>
-                <view class="icon" wx:if="{{!item.showVideo && item.video}}" catchtap="play" data-id="{{item.id}}"></view>
+                <image wx:else src="{{item.smallPic}}" catchtap="play" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}"></image>
+                <view class="icon" wx:if="{{!item.showVideo && item.video}}" data-businessCategoryId="{{item.businessCategoryId}}" catchtap="play" data-id="{{item.id}}"></view>
                 <view class="time" wx:if="{{item.video}}">{{item.videoDuration}}</view>
             </view>
             <view class="content">
