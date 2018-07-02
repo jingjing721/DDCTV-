@@ -1,26 +1,62 @@
 <view class="wraper" wx:if="{{pageShow==1}}">
     <!-- 分类悬浮按钮 -->
-    <view class="classify" catchtap="goClassify" wx:if="{{list.length > 0}}">分类</view>
-    <view class="list-title" wx:if="{{list.length > 0}}">今日十见</view>
-    <view class="list">
-        <view class="item" wx:for="{{list}}" wx:key="key" wx:if="{{item.state==1}}">
+    <view class="classify" catchtap="goClassify">分类</view>
+    <!-- 今天列表 -->
+    <view class="list list1" wx:if="{{currentList.length > 0}}">
+        <view class="list-title" wx:if="{{currentList.length > 0}}">今日十见</view>
+        <view class="item" wx:for="{{currentList}}" wx:key="key" wx:if="{{item.state==1}}">
             <view class="video">
-                <video wx:if="{{item.showVideo}}" autoplay objectFit="fill" src="{{item.video}}"></video>
-                <image wx:else src="{{item.smallPic}}" catchtap="play" data-id="{{item.id}}"></image>
-                <view class="icon" wx:if="{{!item.showVideo}}" catchtap="play" data-id="{{item.id}}"></view>
-                <view class="time">{{item.videoDuration}}</view>
-                <view class="num"><view class="inner"></view></view>
+                <video wx:if="{{item.showVideo && item.video}}" autoplay objectFit="fill" src="{{item.video}}"></video>
+                <image wx:else src="{{item.smallPic}}" catchtap="play" data-businessCategoryId="{{item.businessCategoryId}}" data-indexId="{{item.indexId}}" data-id="{{item.id}}"></image>
+                <view class="icon" wx:if="{{!item.showVideo && item.video}}" catchtap="play"  data-indexId="{{item.indexId}}" data-id="{{item.id}}"></view>
+                <view class="time" wx:if="{{!item.showVideo && item.video}}">{{item.videoDuration}}</view>
+                <view class="num" wx:if="{{!item.showVideo}}"><view class="inner"></view></view>
             </view>
             <view class="content">
                 <view class="title one-line" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.title}}</view>
                 <view class="desc" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.summary}}</view>
                 <view class="control">
-                    <view class="left heart{{item.heart?' on':''}}">{{item.likeCount}}</view>
+                    <view class="left heart{{item.isLike?' on':''}}" catchtap="goHeart" data-id="{{item.id}}">
+                        {{item.likeCount}}
+                        <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-id="{{item.id}}"></button>
+                    </view>
                     <view class="right go" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}"></view>
                 </view>
             </view>
         </view>
-        <!-- 全部加载完毕 -->
-        <view class="end" wx:if="{{end}}">我是有底线的</view>
     </view>
+    <!-- 历史列表 -->
+    <view class="list list2" wx:if="{{historyList.length > 0}}">
+        <view class="item" wx:for="{{historyList}}" wx:key="key">
+            <view wx:if="{{!item.listTitle && item.state==1}}">
+                <view class="video">
+                    <video wx:if="{{item.showVideo && item.video}}" autoplay objectFit="fill" src="{{item.video}}"></video>
+                    <image wx:else src="{{item.smallPic}}" catchtap="play" data-businessCategoryId="{{item.businessCategoryId}}" data-indexId="{{item.indexId}}" data-id="{{item.id}}"></image>
+                    <view class="icon" wx:if="{{!item.showVideo && item.video}}" catchtap="play"  data-indexId="{{item.indexId}}" data-id="{{item.id}}"></view>
+                    <view class="time" wx:if="{{!item.showVideo && item.video}}">{{item.videoDuration}}</view>
+                </view>
+                <view class="content">
+                    <view class="title one-line" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.title}}</view>
+                    <view class="desc" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.summary}}</view>
+                    <view class="control">
+                        <view class="left heart{{item.isLike?' on':''}}" catchtap="goHeart" data-id="{{item.id}}">
+                            {{item.likeCount}}
+                            <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-id="{{item.id}}"></button>
+                        </view>
+                        <view class="right go" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}"></view>
+                    </view>
+                </view>
+            </view>
+            <view class="list2-title" wx:else>
+                <view class="date left">{{item.d}}</view>
+                <view class="dot left">•</view>
+                <view class="time left">
+                    <view class="year">{{item.y}}</view>
+                    <view class="month">{{item.m}}月</view>
+                </view>
+            </view>
+        </view>
+    </view>
+    <!-- 全部加载完毕 -->
+    <view class="end" wx:if="{{!myDate}}">我是有底线的</view>
 </view>

@@ -1,7 +1,7 @@
 <view class="wraper" wx:if="{{list.length>0}}">
 	<view class="list-title">分类</view>
     <view class="list">
-        <view class="item" wx:for="{{list}}" wx:key="key" data-id="{{item.id}}" catchtap="goDetail" wx:if="{{item.state==1}}">
+        <view class="item" wx:for="{{list}}" wx:key="key" data-id="{{item.id}}" catchtap="goDetail" data-title="{{item.title}}" wx:if="{{item.state==1}}">
             <image src="{{item.image}}"></image>
             <view class="title one-line">{{item.title}}</view>
             <view class="desc one-line">{{item.subTitle}}</view>

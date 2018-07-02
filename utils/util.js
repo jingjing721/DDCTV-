@@ -1,8 +1,8 @@
-let status = 0;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
+let status = 1;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
 
-let ajaxUrl  = status==0?'https://tv-d.daydaycook.com.cn':status==1?'https://tv-t.daydaycook.com.cn':status==2?'https://tv-s.daydaycook.com.cn':'https://tv.daydaycook.com.cn';              //用户、地址
+let ajaxUrl  = status==0?'https://tv-d.daydaycook.com.cn/':status==1?'https://tv-t.daydaycook.com.cn/':status==2?'https://tv-s.daydaycook.com.cn/':'https://tv.daydaycook.com.cn/';              //用户、地址
 let ajaxUrl2 = status==0?'https://uc-api-d.daydaycook.com.cn':status==1?'https://uc-api-t.daydaycook.com.cn':status==2?'https://uc-api-s.daydaycook.com.cn':'https://uc-api.daydaycook.com.cn';              //用户、地址
-ajaxUrl = "http://xuqing.natapp1.cc/";
+// ajaxUrl = "http://xuqing.natapp1.cc/";
 //通用Ajax请求接口
 let fetch = (_url,params,type) => {
     return new Promise(resolve => {
@@ -28,6 +28,29 @@ let fetch = (_url,params,type) => {
                 }
             }
         })
+    })
+}
+
+//检测用户是否已登录
+let isLogin = () => {
+    return new Promise(resolve => {
+        let sessionId = wx.getStorageSync('sessionId');
+        if(sessionId){
+            fetch(ajaxUrl2+'/member/islogin',{
+                session:sessionId
+            }).then(res => {
+                if(res.code == 1 && res.data == 1){
+                    //本地sessionId有效
+                    resolve(sessionId)
+                }else{
+                    wx.hideToast();
+                    resolve('')
+                }
+            })
+        }else{
+            wx.hideToast();
+            resolve('')
+        }
     })
 }
 
@@ -85,6 +108,33 @@ let accDiv = (num1, num2) => {
     return accMul((num1Changed / num2Changed), Math.pow(10, digitLength(num2) - digitLength(num1)));
 }
 
+let ajaxBtn = true;
+let getHeart = (businessCategoryId,id,sessionId) => {
+    return new Promise(resolve => {
+        if(!sessionId || !ajaxBtn) {
+            wx.hideToast();
+            resolve('');
+        };
+        ajaxBtn = false;
+        fetch(ajaxUrl+'top-content/like',{
+            businessCategoryId:businessCategoryId,
+            contentId:id,
+            sessionId:sessionId
+        }).then(res => {
+            ajaxBtn = true;
+            if(res && res.code == 0){
+                resolve(res)
+            }else{
+                wx.hideToast();
+                resolve('')
+                wx.showModal({
+                    title:'温馨提示',
+                    content:res.message || '未知错误'
+                })
+            }
+        })
+    })
+}
 //判断手机号码是否合法
 let isPhone = (number) => {
     if((/^1\d{10}$/).test(number)){
@@ -105,4 +155,6 @@ module.exports = {
     accDiv:accDiv,                          //精确除法
     isPhone:isPhone,                        //判断手机号码是否合法
     changeTime:changeTime,
+    isLogin:isLogin,
+    getHeart:getHeart
 }

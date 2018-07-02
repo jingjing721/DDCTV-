@@ -6,6 +6,13 @@ page{
 	font-size: 26rpx;
 	color: #232323;
 }
+button{
+    margin:0;
+    background:none;
+    border:0;
+    background-color: none;
+    border:0 solid transparent;
+}
 .one-line {
     white-space: nowrap;
     -webkit-text-overflow: ellipsis;

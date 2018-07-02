@@ -14,6 +14,7 @@ Page({
                         code:res2.code
                     }).then(res3 => {
                         if(res3 && res3.code == 1){
+                            wx.setStorageSync('sessionId',res3.data.session)
                             console.log(res3.data.session)
                         }else{
                             wx.hideToast();
