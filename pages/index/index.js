@@ -381,8 +381,40 @@ Page({
             })
         }
     },
+    refreshTen(){
+        //刷新首页十见
+        let self = this;
+        if(self.data.currentList.length > 0){
+            util.fetch(util.ajaxUrl+'top-content/list',{
+                date:+new Date(),
+                sessionId:self.data.sessionId
+            }).then(res => {
+                if(res && res.code == 0){
+                    let currentList = [];
+                    res.data.map((item,index) => {
+                        self.setData({
+                            indexId:self.data.indexId+1
+                        })
+                        item.indexId = self.data.indexId;
+                        item.showVideo = false;     //默认不显示视频
+                        item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
+                        currentList.push(item)
+                    })
+                    self.setData({
+                        currentList:currentList
+                    })
+                }else{
+                    wx.showModal({
+                        title:'温馨提示',
+                        content:res.message || '未知错误'
+                    })
+                }
+            })
+        }
+    },
     onShow(){
         this.refreshLikeCount();
+        this.refreshTen();
     },
     onLoad(e){
         let self = this;

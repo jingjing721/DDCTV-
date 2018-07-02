@@ -159,7 +159,8 @@ Page({
                         videoDuration:util.changeTime(res.data.videoDuration),
                         summary:res.data.summary,
                         contentFoodList:res.data.contentFoodList,
-                        contentDetailList:res.data.contentDetailList
+                        contentDetailList:res.data.contentDetailList,
+                        tagList:res.data.tagList,
                     })
                 }else{
                     wx.showModal({

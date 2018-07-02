@@ -60,7 +60,7 @@
 }
 .content .tags{
 	overflow:hidden;
-	margin:20rpx 0 26rpx 0;
+	margin:20rpx 0 26rpx 40rpx;
 }
 .content text{
 	display: block;
@@ -70,6 +70,7 @@
 	color: #fff;
 	border-radius: 6rpx;
 	float:left;
+	margin-right: 20rpx;
 	background-color: #F6B112;
 }
 .content .main{
@@ -77,7 +78,7 @@
 	margin-top: 40rpx;
 	overflow:hidden;
 	font-size: 28rpx;
-	line-height: 1.5;
+	line-height: 2;
 	padding:0 40rpx;
 }
 .praise{
@@ -119,10 +120,11 @@
 
 .list{
 	margin-top: 40rpx;
-	line-height: 1.5;
 }
 .list .item .word{
 	padding: 0 40rpx;
+	line-height: 2;
+	margin: 24rpx 0;
 }
 .list image{
 	margin:20rpx 0;
@@ -132,7 +134,44 @@
 	padding-bottom: 60rpx;
 }
 
-
+.material{
+	overflow:hidden;
+	color: #474747;
+	padding: 0 40rpx;
+	margin-top: 60rpx;
+	margin-bottom: 60rpx;
+}
+.material .title2{
+	font-size: 30rpx;
+	font-weight: bold;
+	margin-bottom: 14rpx;
+	color: #1A1A1A;
+	height: 30rpx;
+	line-height: 30rpx;
+	position: relative;
+}
+.material .title2::before{
+	content:'';
+	width: 8rpx;
+	height: 30rpx;
+	position: absolute;
+	left: -40rpx;
+	top: 0;
+	background-image: -webkit-linear-gradient(45deg, #FF6583 0%, #FF794D 46%, #FFBE67 100%);
+	background-image: -moz-linear-gradient(45deg, #FF6583 0%, #FF794D 46%, #FFBE67 100%);
+	background-image: -ms-linear-gradient(45deg, #FF6583 0%, #FF794D 46%, #FFBE67 100%);
+	background-image: -o-linear-gradient(45deg, #FF6583 0%, #FF794D 46%, #FFBE67 100%);
+	background-image: linear-gradient(45deg, #FF6583 0%, #FF794D 46%, #FFBE67 100%);
+}
+.material .item{
+	font-size: 28rpx;
+	padding:8rpx 0;
+	overflow:hidden;
+}
+.material .item view{
+	width: 50%;
+	text-align: left;
+}
 
 
 
