@@ -198,9 +198,10 @@ Page({
     },
     onShareAppMessage(){
         //转发分享
+        let self = this;
         return {
-            title:'DDCTV',
-            path:'/pages/index/index'
+            title:self.data.title,
+            path:'/pages/v-detail/v-detail?id='+self.data.id+'&businessCategoryId='+self.data.businessCategoryId
         }
     }
 })

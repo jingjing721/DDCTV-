@@ -13,7 +13,6 @@ Page({
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
-        console.log('加载下一页')
         let self = this;
         self.setData({
             init:false
@@ -418,13 +417,15 @@ Page({
     },
     onLoad(e){
         let self = this;
+        //分享进来携带的上一个用户的信息
+        if(e && e.scene){
+            let scene = decodeURIComponent(e.scene);
+            wx.setStorageSync('uid',scene);
+        }
         //设置页面标题
         wx.setNavigationBarTitle({
             title:'DDCTV'
         })
-        // wx.navigateTo({
-            // url:'../login/login'
-        // })
         //优先判断用户是否已登录
         util.isLogin().then(sessionId => {
             //若sessionId值为空，则没登录，否则已登录
