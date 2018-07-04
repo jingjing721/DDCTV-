@@ -412,6 +412,10 @@ Page({
         }
     },
     onShow(){
+        //设置页面标题
+        wx.setNavigationBarTitle({
+            title:'DDCTV'
+        })
         this.refreshLikeCount();
         this.refreshTen();
     },
@@ -422,16 +426,20 @@ Page({
             let scene = decodeURIComponent(e.scene);
             wx.setStorageSync('uid',scene);
         }
-        //设置页面标题
-        wx.setNavigationBarTitle({
-            title:'DDCTV'
-        })
         //优先判断用户是否已登录
         util.isLogin().then(sessionId => {
             //若sessionId值为空，则没登录，否则已登录
             self.setData({
                 sessionId:sessionId
             })
+            //将sessionId转换为userId
+            // util.transform(sessionId).then(userId => {
+            //     if(userId){
+            //         self.setData({
+            //             userId:userId
+            //         })
+            //     }
+            // })
             self.init()
         })
     },
