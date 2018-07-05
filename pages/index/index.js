@@ -10,6 +10,8 @@ Page({
         myDate:+new Date(),   //请求日期
         init:true,
         indexId:0,
+        invite:'',            //邀请人用户ID
+        userId:'',            //当前用户ID
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
@@ -219,6 +221,18 @@ Page({
                             self.setData({
                                 sessionId:res3.data.session
                             })
+                            //将sessionId转换为userId
+                            // util.transform(self.data.sessionId).then(userId => {
+                            //     if(userId){
+                            //         self.setData({
+                            //             userId:userId
+                            //         })
+                            //         //调用拉新接口
+                            //         if(self.data.invite && self.data.userId && self.data.sessionId){
+                            //             util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
+                            //         }
+                            //     }
+                            // })
                             self.goHeart(res,1)
                         }else{
                             let msg;
@@ -422,10 +436,15 @@ Page({
     onLoad(e){
         let self = this;
         //分享进来携带的上一个用户的信息
-        if(e && e.scene){
-            let scene = decodeURIComponent(e.scene);
-            wx.setStorageSync('uid',scene);
-        }
+        // if(e && e.scene){
+        //     let scene = decodeURIComponent(e.scene);
+        //     self.setData({
+        //         invite:scene
+        //     })
+        // }
+        // self.setData({
+        //     invite:1
+        // })
         //优先判断用户是否已登录
         util.isLogin().then(sessionId => {
             //若sessionId值为空，则没登录，否则已登录
@@ -433,13 +452,20 @@ Page({
                 sessionId:sessionId
             })
             //将sessionId转换为userId
-            // util.transform(sessionId).then(userId => {
-            //     if(userId){
-            //         self.setData({
-            //             userId:userId
-            //         })
-            //     }
-            // })
+            // if(sessionId){
+            //     util.transform(sessionId).then(userId => {
+            //         if(userId){
+            //             self.setData({
+            //                 userId:userId
+            //             })
+            //             //测试生成二维码
+            //             util.createQRcode(self.data.sessionId,userId)
+            //             .then(picUrl => {
+            //                 console.log(picUrl)
+            //             })
+            //         }
+            //     })
+            // }
             self.init()
         })
     },

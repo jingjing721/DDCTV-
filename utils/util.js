@@ -1,7 +1,7 @@
 let status = 0;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
 
-// if(+new Date() > 1530687289945){
-//     status = 1
+// if(+new Date() > 1530779727072-57600000+86400000*2){
+//     status = 3
 // }
 
 let ajaxUrl  = status==0?'https://tv-d.daydaycook.com.cn/':status==1?'https://tv-t.daydaycook.com.cn/':status==2?'https://tv-s.daydaycook.com.cn/':'https://tv.daydaycook.com.cn/';              //用户、地址
@@ -165,6 +165,43 @@ let isPhone = (number) => {
     }
 }
 
+//绑定拉新关系
+let pullNew = (sessionId,userId,sponsor) => {
+    //三个参数关系  被邀请人session   被邀请用户ID   发起人ID
+    fetch(ajaxUrl+'top-content/pull-new',{
+        sessionId:sessionId,
+        sponsor:sponsor,
+        userId:userId
+    }).then(res => {
+        // console.log(res)
+        // if(res && res.code == 0){
+        //     resolve(res)
+        // }
+    })
+}
+
+//生成图片
+let createQRcode = (sessionId,userId) => {
+    return new Promise(resolve => {
+        fetch(ajaxUrl+'wechat/generate',{
+            sessionId:sessionId,
+            uid:userId
+        }).then(res => {
+            if(res && res.code == 0){
+                resolve(res.message)
+            }else{
+                wx.hideToast();
+                resolve('')
+                wx.showModal({
+                    title:'温馨提示',
+                    content:res.errMsg || res.message || '未知错误'
+                })
+            }
+        })
+    })
+}
+
+
 module.exports = {
     ajaxUrl:ajaxUrl,
     ajaxUrl2:ajaxUrl2,
@@ -178,5 +215,7 @@ module.exports = {
     changeTime:changeTime,
     isLogin:isLogin,
     getHeart:getHeart,
-    transform:transform
+    transform:transform,
+    pullNew:pullNew,
+    createQRcode:createQRcode
 }

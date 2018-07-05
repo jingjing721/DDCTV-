@@ -168,6 +168,21 @@ Page({
             }
         })
     },
+    getReward(){
+        //领取奖励
+        let self = this;
+        if(self.data.sessionId){
+            util.fetch(util.ajaxUrl+'top-content/log-read',{
+                contentId:self.data.id,
+                businessCategoryId:self.data.businessCategoryId,
+                sessionId:self.data.sessionId
+            }).then(res => {
+                if(res && res.code == 0){
+                    console.log(res)
+                }
+            })
+        }
+    },
     onShow(){},
     onLoad(e){
         let self = this;
@@ -185,7 +200,8 @@ Page({
             self.setData({
                 sessionId:sessionId
             })
-            self.init()
+            // self.getReward();
+            self.init();
         })
     },
     onShareAppMessage(){
