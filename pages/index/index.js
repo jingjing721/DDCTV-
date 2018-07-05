@@ -10,10 +10,11 @@ Page({
         myDate:+new Date(),   //请求日期
         init:true,
         indexId:0,
+        invite:'',            //邀请人用户ID
+        userId:'',            //当前用户ID
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
-        console.log('加载下一页')
         let self = this;
         self.setData({
             init:false
@@ -220,6 +221,18 @@ Page({
                             self.setData({
                                 sessionId:res3.data.session
                             })
+                            //将sessionId转换为userId
+                            // util.transform(self.data.sessionId).then(userId => {
+                            //     if(userId){
+                            //         self.setData({
+                            //             userId:userId
+                            //         })
+                            //         //调用拉新接口
+                            //         if(self.data.invite && self.data.userId && self.data.sessionId){
+                            //             util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
+                            //         }
+                            //     }
+                            // })
                             self.goHeart(res,1)
                         }else{
                             let msg;
@@ -381,17 +394,56 @@ Page({
             })
         }
     },
-    onShow(){
-        this.refreshLikeCount();
-    },
-    onLoad(e){
+    refreshTen(){
+        //刷新首页十见
         let self = this;
+        if(self.data.currentList.length > 0){
+            util.fetch(util.ajaxUrl+'top-content/list',{
+                date:+new Date(),
+                sessionId:self.data.sessionId
+            }).then(res => {
+                if(res && res.code == 0){
+                    let currentList = [];
+                    res.data.map((item,index) => {
+                        self.setData({
+                            indexId:self.data.indexId+1
+                        })
+                        item.indexId = self.data.indexId;
+                        item.showVideo = false;     //默认不显示视频
+                        item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
+                        currentList.push(item)
+                    })
+                    self.setData({
+                        currentList:currentList
+                    })
+                }else{
+                    wx.showModal({
+                        title:'温馨提示',
+                        content:res.message || '未知错误'
+                    })
+                }
+            })
+        }
+    },
+    onShow(){
         //设置页面标题
         wx.setNavigationBarTitle({
             title:'DDCTV'
         })
-        // wx.navigateTo({
-            // url:'../login/login'
+        this.refreshLikeCount();
+        this.refreshTen();
+    },
+    onLoad(e){
+        let self = this;
+        //分享进来携带的上一个用户的信息
+        // if(e && e.scene){
+        //     let scene = decodeURIComponent(e.scene);
+        //     self.setData({
+        //         invite:scene
+        //     })
+        // }
+        // self.setData({
+        //     invite:1
         // })
         //优先判断用户是否已登录
         util.isLogin().then(sessionId => {
@@ -399,6 +451,21 @@ Page({
             self.setData({
                 sessionId:sessionId
             })
+            //将sessionId转换为userId
+            // if(sessionId){
+            //     util.transform(sessionId).then(userId => {
+            //         if(userId){
+            //             self.setData({
+            //                 userId:userId
+            //             })
+            //             //测试生成二维码
+            //             util.createQRcode(self.data.sessionId,userId)
+            //             .then(picUrl => {
+            //                 console.log(picUrl)
+            //             })
+            //         }
+            //     })
+            // }
             self.init()
         })
     },

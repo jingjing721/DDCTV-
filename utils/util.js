@@ -1,8 +1,12 @@
-let status = 1;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
+let status = 0;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
+
+// if(+new Date() > 1530779727072-57600000+86400000*2){
+//     status = 3
+// }
 
 let ajaxUrl  = status==0?'https://tv-d.daydaycook.com.cn/':status==1?'https://tv-t.daydaycook.com.cn/':status==2?'https://tv-s.daydaycook.com.cn/':'https://tv.daydaycook.com.cn/';              //用户、地址
 let ajaxUrl2 = status==0?'https://uc-api-d.daydaycook.com.cn':status==1?'https://uc-api-t.daydaycook.com.cn':status==2?'https://uc-api-s.daydaycook.com.cn':'https://uc-api.daydaycook.com.cn';              //用户、地址
-// ajaxUrl = "http://xuqing.natapp1.cc/";
+
 //通用Ajax请求接口
 let fetch = (_url,params,type) => {
     return new Promise(resolve => {
@@ -26,6 +30,23 @@ let fetch = (_url,params,type) => {
                         content:'服务器错误'
                     })
                 }
+            }
+        })
+    })
+}
+
+//sessionId换uid
+let transform = sessionId => {
+    return new Promise(resolve => {
+        fetch(ajaxUrl2+'/member/deal',{
+            session:sessionId
+        }).then(res => {
+            if(res.code == 1){
+                //本地sessionId有效
+                resolve(res.data)
+            }else{
+                wx.hideToast();
+                resolve('')
             }
         })
     })
@@ -144,6 +165,43 @@ let isPhone = (number) => {
     }
 }
 
+//绑定拉新关系
+let pullNew = (sessionId,userId,sponsor) => {
+    //三个参数关系  被邀请人session   被邀请用户ID   发起人ID
+    fetch(ajaxUrl+'top-content/pull-new',{
+        sessionId:sessionId,
+        sponsor:sponsor,
+        userId:userId
+    }).then(res => {
+        // console.log(res)
+        // if(res && res.code == 0){
+        //     resolve(res)
+        // }
+    })
+}
+
+//生成图片
+let createQRcode = (sessionId,userId) => {
+    return new Promise(resolve => {
+        fetch(ajaxUrl+'wechat/generate',{
+            sessionId:sessionId,
+            uid:userId
+        }).then(res => {
+            if(res && res.code == 0){
+                resolve(res.message)
+            }else{
+                wx.hideToast();
+                resolve('')
+                wx.showModal({
+                    title:'温馨提示',
+                    content:res.errMsg || res.message || '未知错误'
+                })
+            }
+        })
+    })
+}
+
+
 module.exports = {
     ajaxUrl:ajaxUrl,
     ajaxUrl2:ajaxUrl2,
@@ -156,5 +214,8 @@ module.exports = {
     isPhone:isPhone,                        //判断手机号码是否合法
     changeTime:changeTime,
     isLogin:isLogin,
-    getHeart:getHeart
+    getHeart:getHeart,
+    transform:transform,
+    pullNew:pullNew,
+    createQRcode:createQRcode
 }

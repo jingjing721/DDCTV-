@@ -276,12 +276,5 @@ Page({
             })
             self.init()
         })
-    },
-    onShareAppMessage(){
-        //转发分享
-        return {
-            title:'DDCTV',
-            path:'/pages/index/index'
-        }
     }
 })

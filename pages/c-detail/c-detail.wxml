@@ -9,15 +9,17 @@
             <image src="{{smallPic}}"></image>
         </view>
         <view class="name two-line">{{title}}</view>
-        <!-- <view class="tags"><text>#假装很会吃</text></view> -->
+        <view class="tags" wx:if="{{tagList && tagList.length > 0}}">
+            <text wx:for="{{tagList}}" wx:key="key">#{{item.name}}</text>
+        </view>
         <view class="desc">{{summary}}</view>
-        <view class="material" wx:if="{{contentFoodList.length > 0}}">
+        <view class="material" wx:if="{{contentFoodList && contentFoodList.length > 0}}">
             <view class="title">食材</view>
             <view class="item" wx:for="{{contentFoodList}}" wx:key="key">
                 <view class="left">{{item.name}}</view><view class="left">{{item.count}}</view>
             </view>
         </view>
-        <view class="step" wx:if="{{contentDetailList.length > 0}}" wx:for="{{contentDetailList}}" wx:key="key">
+        <view class="step" wx:if="{{contentDetailList && contentDetailList.length > 0}}" wx:for="{{contentDetailList}}" wx:key="key">
             <view class="title">{{item.first}}<text>/{{item.last}}</text></view>
             <view class="main">
                 <view class="word">{{item.detail}}</view>

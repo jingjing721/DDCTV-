@@ -151,6 +151,8 @@ Page({
                         videoDuration:util.changeTime(res.data.videoDuration),
                         summary:res.data.summary,
                         contentDetailList:res.data.contentDetailList,
+                        contentFoodList:res.data.contentFoodList,
+                        tagList:res.data.tagList
                     })
                 }else{
                     wx.showModal({
@@ -165,6 +167,21 @@ Page({
                 })
             }
         })
+    },
+    getReward(){
+        //领取奖励
+        let self = this;
+        if(self.data.sessionId){
+            util.fetch(util.ajaxUrl+'top-content/log-read',{
+                contentId:self.data.id,
+                businessCategoryId:self.data.businessCategoryId,
+                sessionId:self.data.sessionId
+            }).then(res => {
+                if(res && res.code == 0){
+                    console.log(res)
+                }
+            })
+        }
     },
     onShow(){},
     onLoad(e){
@@ -183,14 +200,16 @@ Page({
             self.setData({
                 sessionId:sessionId
             })
-            self.init()
+            // self.getReward();
+            self.init();
         })
     },
     onShareAppMessage(){
         //转发分享
+        let self = this;
         return {
-            title:'DDCTV',
-            path:'/pages/index/index'
+            title:self.data.title,
+            path:'/pages/v-detail/v-detail?id='+self.data.id+'&businessCategoryId='+self.data.businessCategoryId
         }
     }
 })
