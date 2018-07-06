@@ -60,3 +60,4 @@
     <!-- 全部加载完毕 -->
     <view class="end" wx:if="{{!myDate}}">我是有底线的</view>
 </view>
+<!-- <web-view src="https://mobile-test.daydaycook.com.cn/xcx/#/"></web-view> -->

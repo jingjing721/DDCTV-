@@ -1,4 +1,4 @@
-let status = 0;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
+let status = 1;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
 
 // if(+new Date() > 1530779727072-57600000+86400000*2){
 //     status = 3
