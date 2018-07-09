@@ -71,7 +71,7 @@
 	border-radius: 6rpx;
 	float:left;
 	margin-right: 20rpx;
-	background-color: #F6B112;
+	background-image: linear-gradient(57deg, #FFBE67 16%, #FF794D 59%, #FF6583 100%);
 }
 .content .desc{
 	color: #474747;

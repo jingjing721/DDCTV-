@@ -1,4 +1,4 @@
-let status = 1;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
+let status = 0;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
 
 // if(+new Date() > 1530779727072-57600000+86400000*2){
 //     status = 3
@@ -24,6 +24,7 @@ let fetch = (_url,params,type) => {
                         content:'请求超时，请返回重试'
                     })
                 }else{
+                    console.log(_url)
                     wx.hideToast();
                     wx.showModal({
                         title:'温馨提示',
@@ -187,7 +188,7 @@ let createQRcode = (sessionId,userId) => {
             sessionId:sessionId,
             uid:userId
         }).then(res => {
-            if(res && res.code == 0){
+            if(res && res.code == 0 && res.message){
                 resolve(res.message)
             }else{
                 wx.hideToast();

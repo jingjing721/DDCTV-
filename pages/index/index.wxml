@@ -1,4 +1,29 @@
 <view class="wraper" wx:if="{{pageShow==1}}">
+    <!-- 分享悬浮窗 -->
+    <view class="shareMark" catchtap="showShareBtn" wx:if="{{mark}}">
+        <view class="shareBox" catchtap="stop">
+            <button open-type="share" class="btns btn1">
+                <view class="img">
+                    <image src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></image>
+                </view>
+                <view class="w">微信好友</view>
+            </button>
+            <view class="btns btn2" catchtap="showPic">
+                <view class="img">
+                    <image src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></image>
+                </view>
+                <view class="w">保存图片</view>
+            </view>
+        </view>
+    </view>
+    <!-- 保存图片 -->
+    <view class="savePic" wx:if="{{mark2}}" catchtap="showPic">
+        <view class="pic" catchtap="stop">
+            <view class="close" catchtap="showPic"></view>
+            <image wx:if="{{picUrl}}" src="{{picUrl}}"></image>
+        </view>
+        <view class="saveBtn" catchtap="savePic">保存图片到本地</view>
+    </view>
     <!-- 分类悬浮按钮 -->
     <view class="classify" catchtap="goClassify">分类</view>
     <!-- 今天列表 -->
@@ -16,11 +41,15 @@
                 <view class="title one-line" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.title}}</view>
                 <view class="desc" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.summary}}</view>
                 <view class="control">
-                    <view class="left heart{{item.isLike?' on':''}}" catchtap="goHeart" data-id="{{item.id}}">
-                        {{item.likeCount}}
-                        <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-id="{{item.id}}"></button>
+                    <view class="info" wx:if="{{index==0 && info}}">分享新用户、观看内容得优惠券</view>
+                    <view class="right share" wx:if="{{sessionId}}" catchtap="showShareBtn"></view>
+                    <view class="right share" wx:if="{{!sessionId}}">
+                        <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-from="2" data-id="{{item.id}}"></button>
                     </view>
-                    <view class="right go" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}"></view>
+                    <view class="right heart{{item.isLike?' on':''}}" catchtap="goHeart" data-id="{{item.id}}">
+                        {{item.likeCount}}
+                        <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-from="1" data-id="{{item.id}}"></button>
+                    </view>
                 </view>
             </view>
         </view>
@@ -39,11 +68,15 @@
                     <view class="title one-line" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.title}}</view>
                     <view class="desc" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.summary}}</view>
                     <view class="control">
-                        <view class="left heart{{item.isLike?' on':''}}" catchtap="goHeart" data-id="{{item.id}}">
-                            {{item.likeCount}}
-                            <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-id="{{item.id}}"></button>
+                        <view class="info" wx:if="{{index==0 && info}}">分享新用户、观看内容得优惠券</view>
+                        <view class="right share" wx:if="{{sessionId}}" catchtap="showShareBtn"></view>
+                        <view class="right share" wx:if="{{!sessionId}}">
+                            <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-from="2" data-id="{{item.id}}"></button>
                         </view>
-                        <view class="right go" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}"></view>
+                        <view class="right heart{{item.isLike?' on':''}}" catchtap="goHeart" data-id="{{item.id}}">
+                            {{item.likeCount}}
+                            <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-from="1" data-id="{{item.id}}"></button>
+                        </view>
                     </view>
                 </view>
             </view>

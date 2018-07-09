@@ -16,7 +16,6 @@
                         {{item.likeCount}}
                         <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" data-id="{{item.id}}" class="myButton"></button>
                     </view>
-                    <view class="right go" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}"></view>
                 </view>
             </view>
         </view>

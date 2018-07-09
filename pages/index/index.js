@@ -12,6 +12,9 @@ Page({
         indexId:0,
         invite:'',            //邀请人用户ID
         userId:'',            //当前用户ID
+        mark:false,           //选择发给朋友，还是朋友圈
+        mark2:false,          //显示保存本地图片的弹窗
+        picUrl:'',            //弹窗图片
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
@@ -202,6 +205,7 @@ Page({
     onGotUserInfo(res){
         //获取code值
         let self = this;
+        let from = res.target.dataset.from;     //1 点赞   2分享
         wx.login({
             success(res2){
                 if(res.detail.errMsg.indexOf('ok') > -1){
@@ -222,18 +226,24 @@ Page({
                                 sessionId:res3.data.session
                             })
                             //将sessionId转换为userId
-                            // util.transform(self.data.sessionId).then(userId => {
-                            //     if(userId){
-                            //         self.setData({
-                            //             userId:userId
-                            //         })
-                            //         //调用拉新接口
-                            //         if(self.data.invite && self.data.userId && self.data.sessionId){
-                            //             util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
-                            //         }
-                            //     }
-                            // })
-                            self.goHeart(res,1)
+                            util.transform(self.data.sessionId).then(userId => {
+                                if(userId){
+                                    self.setData({
+                                        userId:userId
+                                    })
+                                    //调用拉新接口
+                                    if(self.data.invite && self.data.userId && self.data.sessionId){
+                                        util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
+                                    }
+                                }
+                            })
+                            if(from == 1){
+                                //点赞
+                               self.goHeart(res,1) 
+                            }else{
+                                //显示分享悬浮窗
+                                self.showShareBtn()
+                            }
                         }else{
                             let msg;
                             switch(res3.code){
@@ -430,50 +440,137 @@ Page({
         wx.setNavigationBarTitle({
             title:'DDCTV'
         })
+        //是否显示分享相关的提示
+        let info = wx.getStorageSync('info');
+        this.setData({
+            info:info?0:1
+        })
+        wx.setStorageSync('info',1)
         this.refreshLikeCount();
         this.refreshTen();
     },
     onLoad(e){
         let self = this;
         //分享进来携带的上一个用户的信息
-        // if(e && e.scene){
-        //     let scene = decodeURIComponent(e.scene);
-        //     self.setData({
-        //         invite:scene
-        //     })
-        // }
-        // self.setData({
-        //     invite:1
-        // })
+        if(e && e.scene){
+            let scene = decodeURIComponent(e.scene);
+            self.setData({
+                invite:scene
+            })
+        }
         //优先判断用户是否已登录
         util.isLogin().then(sessionId => {
             //若sessionId值为空，则没登录，否则已登录
             self.setData({
-                sessionId:sessionId
+                sessionId:sessionId,
             })
             //将sessionId转换为userId
-            // if(sessionId){
-            //     util.transform(sessionId).then(userId => {
-            //         if(userId){
-            //             self.setData({
-            //                 userId:userId
-            //             })
-            //             //测试生成二维码
-            //             util.createQRcode(self.data.sessionId,userId)
-            //             .then(picUrl => {
-            //                 console.log(picUrl)
-            //             })
-            //         }
-            //     })
-            // }
+            if(sessionId){
+                util.transform(sessionId).then(userId => {
+                    if(userId){
+                        self.setData({
+                            userId:userId
+                        })
+                        //调用拉新接口
+                        if(self.data.invite && self.data.userId && self.data.sessionId){
+                            util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
+                        }
+                    }
+                })
+            }
             self.init()
         })
     },
+    stop(){},
+    showPic(){
+        //控制是否显示朋友圈的图片
+        let self = this;
+        self.setData({
+            mark2:self.data.mark2?false:true
+        })
+        if(self.data.mark2){
+            self.setData({
+                mark:false
+            })
+        }
+        if(self.data.mark2 && !self.data.picUrl){
+            //生成图片
+            wx.showToast({
+                title:'',
+                icon:'loading',
+                duration:15000
+            })
+            util.createQRcode(self.data.sessionId,self.data.userId)
+            .then(picUrl => {
+                wx.hideToast();
+                if(picUrl){
+                    self.setData({
+                        picUrl:picUrl
+                    })
+                }else{
+                    wx.showModal({
+                        title:'温馨提示',
+                        content:'获取图片失败，请返回重试'
+                    })
+                }
+            })
+        }
+    },
+    savePic(){
+        //保存图片
+        let self = this;
+        if(!self.data.picUrl){
+            wx.showModal({
+                title:'温馨提示',
+                content:'请耐心等待图片生成完毕'
+            })
+            return
+        }
+        wx.showToast({
+            title:'',
+            icon:'loading',
+            duration:15000
+        })
+        wx.getImageInfo({
+            src:self.data.picUrl,
+            success(res){
+                wx.saveImageToPhotosAlbum({
+                    filePath:res.path,
+                    success(res){
+                        wx.showToast({
+                            icon:'success',
+                            title:'保存成功'
+                        })
+                    },
+                    fail(res){
+                        wx.showToast({
+                            icon:'success',
+                            title:'保存失败'
+                        })
+                    },
+                    complete(res){
+                        self.setData({
+                            mark:false,
+                            mark2:false
+                        })
+                    }
+                })
+            }
+        })
+    },
+    showShareBtn(){
+        //是否显示分享按钮
+        let self = this;
+        self.setData({
+            mark:self.data.mark?false:true
+        })
+    },
     onShareAppMessage(){
+        let self = this;
         //转发分享
         return {
             title:'DDCTV',
-            path:'/pages/index/index'
+            path:'/pages/index/index?scene='+self.data.userId
         }
     }
 })
