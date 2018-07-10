@@ -93,4 +93,18 @@
     <!-- 全部加载完毕 -->
     <view class="end" wx:if="{{!myDate}}">我是有底线的</view>
 </view>
+<!-- 弹窗输入框 -->
+<view class="alertBox alertBox2" wx:if="{{lastDay}}" catchtap="closeLastDay">
+    <view class="box" catchtap="stop">
+        <view class="close" catchtap="closeLastDay"></view>
+        <view class="imgs"><image class="t2" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></image>
+        </view>
+        <view class="price"><text>￥</text>{{amount}}</view>
+        <view class="w">{{info2}}</view>
+        <view class="main">
+            <view class="copyright">可去日日煮APP“我的-优惠券”查看</view>
+            <view class="go" catchtap="downLoad">去使用</view>
+        </view>
+    </view>
+</view>
 <!-- <web-view src="https://mobile-test.daydaycook.com.cn/xcx/#/"></web-view> -->

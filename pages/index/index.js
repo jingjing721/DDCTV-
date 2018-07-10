@@ -15,6 +15,7 @@ Page({
         mark:false,           //选择发给朋友，还是朋友圈
         mark2:false,          //显示保存本地图片的弹窗
         picUrl:'',            //弹窗图片
+        lastDay:false,        //控制是否显示昨日领券弹窗
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
@@ -464,6 +465,23 @@ Page({
             self.setData({
                 sessionId:sessionId,
             })
+            //判断昨天领取情况
+            let indexYear = wx.getStorageSync('indexYear')
+            let indexMonth = wx.getStorageSync('indexMonth')
+            let indexDate = wx.getStorageSync('indexDate')
+            let myDate = new Date();
+            let year = myDate.getFullYear();
+            let month = myDate.getMonth()+1;
+            let date = myDate.getDate();
+            if(!indexYear){
+                //第一次请求，没缓存的情况下
+                self.lastDay();
+            }else{
+                //有本地之前有缓存，判断今天是否已提示过
+                if(indexYear != year || indexMonth != month || indexDate != date){
+                    self.lastDay();
+                }
+            }
             //将sessionId转换为userId
             if(sessionId){
                 util.transform(sessionId).then(userId => {
@@ -480,6 +498,45 @@ Page({
             }
             self.init()
         })
+    },
+    downLoad(){
+        wx.showModal({
+            title:'温馨提示',
+            content:'请前往应用商店下载日日煮APP'
+        })
+    },
+    closeLastDay(){
+        //关闭弹窗
+        this.setData({
+            lastDay:false
+        })
+    },
+    lastDay(){
+        //获取昨日领取情况
+        let self = this;
+        if(self.data.sessionId){
+            util.fetch(util.ajaxUrl+'top-content/yesterday-reward',{
+                sessionId:self.data.sessionId
+            }).then(res => {
+                if(res && res.code == 0){
+                    self.setData({
+                        lastDay:res.data.amount>0?true:false,
+                        amount:res.data.amount,
+                        info2:res.data.title
+                    })
+                    //当天不再显示
+                    if(self.data.lastDay){
+                        let myDate = new Date();
+                        let year = myDate.getFullYear();
+                        let month = myDate.getMonth()+1;
+                        let date = myDate.getDate();
+                        wx.setStorageSync('indexYear',year)
+                        wx.setStorageSync('indexMonth',month)
+                        wx.setStorageSync('indexDate',date)
+                    }
+                }
+            })
+        }
     },
     stop(){},
     showPic(){

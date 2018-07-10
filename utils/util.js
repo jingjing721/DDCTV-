@@ -1,9 +1,5 @@
 let status = 0;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
 
-// if(+new Date() > 1530779727072-57600000+86400000*2){
-//     status = 3
-// }
-
 let ajaxUrl  = status==0?'https://tv-d.daydaycook.com.cn/':status==1?'https://tv-t.daydaycook.com.cn/':status==2?'https://tv-s.daydaycook.com.cn/':'https://tv.daydaycook.com.cn/';              //用户、地址
 let ajaxUrl2 = status==0?'https://uc-api-d.daydaycook.com.cn':status==1?'https://uc-api-t.daydaycook.com.cn':status==2?'https://uc-api-s.daydaycook.com.cn':'https://uc-api.daydaycook.com.cn';              //用户、地址
 
@@ -202,6 +198,21 @@ let createQRcode = (sessionId,userId) => {
     })
 }
 
+//检测当前session是否绑定手机号码
+let isBind = sessionId => {
+    return new Promise(resolve => {
+        fetch(ajaxUrl2+'/member/get',{
+            session:sessionId,
+        }).then(res => {
+            if(res.code &&  res.code == 1 && res.data && res.data.bind == 1){
+                resolve(true)
+            }else{
+                resolve(false)
+            }
+        })
+    })
+}
+
 
 module.exports = {
     ajaxUrl:ajaxUrl,
@@ -218,5 +229,6 @@ module.exports = {
     getHeart:getHeart,
     transform:transform,
     pullNew:pullNew,
-    createQRcode:createQRcode
+    createQRcode:createQRcode,
+    isBind:isBind
 }
