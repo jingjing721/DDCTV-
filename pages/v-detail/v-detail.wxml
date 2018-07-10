@@ -32,7 +32,7 @@
             </view>
             <view class="price"><text>￥</text>{{amount}}</view>
             <view class="w">{{info2}}</view>
-            <view class="phone item">
+            <view class="phone item" wx:if="{{alert==1}}">
                 <view class="left">
                     <input type="number" placeholder="请输入手机号" bindinput="getPhone" maxlength="11" />
                 </view>
@@ -40,10 +40,14 @@
                 <view class="right on" catchtap="send" wx:if="{{status==2}}">重新发送</view>
                 <view class="right timer" wx:if="{{status==3}}">已发送({{timer}}s)</view>
             </view>
-            <view class="randcode item">
+            <view class="randcode item" wx:if="{{alert==1}}">
                 <input type="number" placeholder="请输入验证码" bindinput="getCode" />
             </view>
-            <view class="get" catchtap="goUpload">我要领取</view>
+            <view class="get" catchtap="goUpload" wx:if="{{alert==1}}">我要领取</view>
+            <view class="main" wx:if="{{alert==2}}">
+                <view class="copyright">可去日日煮APP“我的-优惠券”查看</view>
+                <view class="go" catchtap="downLoad">去使用</view>
+            </view>
         </view>
     </view>
     <view class="video" wx:if="{{video}}">

@@ -14,6 +14,7 @@ Page({
         bind:false,           //是否显示绑定图片弹窗
         status:1,             //验证码发送状态
         timer:60,             //倒计时剩余时间
+        alert:1
     },
     getHeart(from){
         //点赞
@@ -396,6 +397,9 @@ Page({
                     title:'领取成功',
                     icon:'success',
                     duration:1500
+                })
+                self.setData({
+                    alert:2
                 })
             }
         })
