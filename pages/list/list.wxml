@@ -3,7 +3,7 @@
     <view class="list">
         <view class="item" wx:for="{{list}}" wx:key="key" wx:if="{{item.state==1}}">
             <view class="video">
-                <video wx:if="{{item.showVideo && item.video}}" autoplay objectFit="fill" src="{{item.video}}"></video>
+                <video wx:if="{{item.showVideo && item.video}}" autoplay objectFit="fill" src="{{item.video}}" bindended="videoEnd" data-id="{{item.id}}" bindplay="bindplay"></video>
                 <image wx:else src="{{item.smallPic}}" catchtap="play" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}"></image>
                 <view class="icon" wx:if="{{!item.showVideo && item.video}}" data-businessCategoryId="{{item.businessCategoryId}}" catchtap="play" data-id="{{item.id}}"></view>
                 <view class="time" wx:if="{{item.video}}">{{item.videoDuration}}</view>
@@ -25,5 +25,31 @@
         </view>
         <!-- 全部加载完毕 -->
         <view class="end" wx:if="{{!next}}">我是有底线的</view>
+    </view>
+</view>
+<!-- 弹窗输入框 -->
+<view class="alertBox" wx:if="{{bind}}">
+    <view class="box" catchtap="stop">
+        <view class="close" catchtap="ctrlBox"></view>
+        <view class="imgs"><image class="t1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></image>
+        </view>
+        <view class="price"><text>￥</text>{{amount}}</view>
+        <view class="w">{{info2}}</view>
+        <view class="phone item" wx:if="{{alert==1}}">
+            <view class="left">
+                <input type="number" placeholder="请输入手机号" bindinput="getPhone" maxlength="11" />
+            </view>
+            <view class="right" catchtap="send" wx:if="{{status==1}}">获取验证码</view>
+            <view class="right on" catchtap="send" wx:if="{{status==2}}">重新发送</view>
+            <view class="right timer" wx:if="{{status==3}}">已发送({{timer}}s)</view>
+        </view>
+        <view class="randcode item" wx:if="{{alert==1}}">
+            <input type="number" placeholder="请输入验证码" bindinput="getCode" />
+        </view>
+        <view class="get" catchtap="goUpload" wx:if="{{alert==1}}">我要领取</view>
+        <view class="main" wx:if="{{alert==2}}">
+            <view class="copyright">可去日日煮APP“我的-优惠券”查看</view>
+            <view class="go" catchtap="downLoad">去使用</view>
+        </view>
     </view>
 </view>

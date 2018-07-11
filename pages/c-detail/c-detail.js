@@ -37,12 +37,14 @@ Page({
                         likeCount:likeCount,
                         isLike:0
                     })
+                    wx.reportAnalytics('like_cancel', {});
                 }else{
                     //点赞
                     self.setData({
                         likeCount:self.data.likeCount+1,
                         isLike:1
                     })
+                    wx.reportAnalytics('like_add', {});
                 }
             }
             //提交后台
@@ -150,12 +152,31 @@ Page({
             }
         })
     },
+    videoEnd(){
+        //播放结束
+        let self = this;
+        wx.reportAnalytics('video_end', {
+            video_name: self.data.title,
+        })
+    },
     play(){
+        let self = this;
         if(this.data.video){
             this.setData({
                 play:!this.data.play
             })
+            //埋点(视频开始播放)
+            wx.reportAnalytics('video_begin', {
+                video_name: self.data.title,
+            })
         }
+    },
+    bindplay(){
+        //开始播放视频
+        let self = this;
+        setTimeout(() => {
+            self.readyToCoupon();
+        },30000)
     },
     init(){
         //请求详情
@@ -190,6 +211,12 @@ Page({
                         contentDetailList:res.data.contentDetailList,
                         tagList:res.data.tagList,
                     })
+                    if(!self.data.video){
+                        //没视频的时候，倒计时30s后发券
+                        setTimeout(() => {
+                            if(self.data.sessionId) self.readyToCoupon();
+                        },30000)
+                    }
                 }else{
                     wx.showModal({
                         title:'温馨提示',
@@ -214,7 +241,8 @@ Page({
         })
         self.setData({
             businessCategoryId:Number(e.businessCategoryId),
-            id:Number(e.id)
+            id:Number(e.id),
+            invite:e.invite
         })
         util.isLogin().then(sessionId => {
             //若sessionId值为空，则没登录，否则已登录
@@ -223,9 +251,6 @@ Page({
             })
             //将sessionId转换为userId
             if(sessionId){
-                setTimeout(() => {
-                    self.readyToCoupon();
-                },30000)
                 util.transform(sessionId).then(userId => {
                     if(userId){
                         self.setData({
@@ -269,7 +294,6 @@ Page({
                 mobile:self.data.phone
             }).then(res => {
                 wx.hideToast();
-                console.log(res)
                 if(res && res.code == 1){
                     wx.showToast({
                         title:'发送成功',
@@ -312,16 +336,13 @@ Page({
                 session:self.data.sessionId
             }).then(res => {
                 wx.hideToast();
-                console.log(res)
                 if(res && res.code == 1){
                     wx.showToast({
                         title:'绑定成功',
                         icon:'success',
                         duration:1500
                     })
-                    setTimeout(() => {
-                        self.getCoupon();
-                    },1500)
+                    self.getCoupon();
                     self.setData({
                         status:1
                     })
@@ -355,9 +376,10 @@ Page({
         //开始倒计时
         let self = this;
         let timer = setInterval(() => {
-            if(self.data.timer < 1) {
+            if(self.data.timer < 2) {
                 self.setData({
-                    status:2
+                    status:2,
+                    timer:60
                 })
                 clearInterval(timer)
             }
@@ -378,6 +400,7 @@ Page({
                 // console.log(res)
             }
         })
+        self.rewardInfo();
         //触发领券
         util.fetch(util.ajaxUrl+'top-content/get-reward',{
             contentId:self.data.id,
@@ -385,12 +408,8 @@ Page({
             sessionId:self.data.sessionId
         }).then(res => {
             if(res && res.code == 0){
-                wx.showToast({
-                    title:'领取成功',
-                    icon:'success',
-                    duration:1500
-                })
                 self.setData({
+                    bind:true,
                     alert:2
                 })
             }
@@ -398,7 +417,7 @@ Page({
     },
     downLoad(){
         wx.showModal({
-            title:'温馨提示',
+            title:'',
             content:'请前往应用商店下载日日煮APP'
         })
     },

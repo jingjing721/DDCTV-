@@ -16,6 +16,10 @@ Page({
         mark2:false,          //显示保存本地图片的弹窗
         picUrl:'',            //弹窗图片
         lastDay:false,        //控制是否显示昨日领券弹窗
+        bind:false,           //是否显示绑定图片弹窗
+        status:1,             //验证码发送状态
+        timer:60,             //倒计时剩余时间
+        alert:1
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
@@ -129,9 +133,6 @@ Page({
                 icon:'loading',
                 duration:15000
             })
-            wx.reportAnalytics('click', {
-                click: 'isLike',
-            });
             //优先反应
             let currentList = self.data.currentList;
             if(!from){
@@ -141,11 +142,13 @@ Page({
                             //点赞
                             item.isLike = 1;
                             item.likeCount++;
+                            wx.reportAnalytics('like_add', {});
                         }else{
                             //取消点赞
                             item.isLike = 0;
                             item.likeCount--;
                             if(item.likeCount <= 0) item.likeCount = 0;
+                            wx.reportAnalytics('like_cancel', {});
                         }
                     }
                 })
@@ -299,8 +302,26 @@ Page({
             }
         })
     },
+    videoEnd(e){
+        //视频播放完毕埋点
+        let self = this;
+        let id = e.currentTarget.dataset.id;
+        let indexId = e.currentTarget.dataset.indexid;
+        let currentList = this.data.currentList;
+        let historyList = this.data.historyList;
+        let _filter = currentList.filter(item => item.indexId == indexId);
+        if(_filter.length > 0){
+            _filter = _filter[0];
+        }else{
+            _filter = historyList.filter(item => item.indexId == indexId)[0]
+        }
+        wx.reportAnalytics('video_end', {
+            video_name: _filter.title,
+        })
+    },
     play(e){
         //是否播放
+        let self = this;
         let id = e.currentTarget.dataset.id;
         let indexId = e.currentTarget.dataset.indexid;
         let currentList = this.data.currentList;
@@ -320,7 +341,23 @@ Page({
         }
         if(!_filter.video){
             this.goDetail(e)
+        }else{
+            self.setData({
+                id:_filter.id,
+                businessCategoryId:_filter.businessCategoryId
+            })
+            //埋点(视频开始播放)
+            wx.reportAnalytics('video_begin', {
+                video_name: _filter.title,
+            })
         }
+    },
+    bindplay(){
+        //开始播放视频
+        let self = this;
+        setTimeout(() => {
+            self.readyToCoupon();
+        },30000)
     },
     goDetail(e){
         //跳转到详情页
@@ -501,7 +538,7 @@ Page({
     },
     downLoad(){
         wx.showModal({
-            title:'温馨提示',
+            title:'',
             content:'请前往应用商店下载日日煮APP'
         })
     },
@@ -629,5 +666,69 @@ Page({
             title:'DDCTV',
             path:'/pages/index/index?scene='+self.data.userId
         }
+    },
+    readyToCoupon(){
+        //判断否可去领券
+        let self = this;
+        if(self.data.sessionId){
+            util.isBind(self.data.sessionId)
+            .then(res => {
+                if(res){
+                    //已绑定手机号码
+                    self.getCoupon();
+                }else{
+                    //弹窗需要绑定手机号码
+                    self.rewardInfo();
+                    self.setData({
+                        bind:true
+                    })
+                }
+            })
+        }
+    },
+    getCoupon(){
+        //记录阅读信息
+        let self = this;
+        util.fetch(util.ajaxUrl+'top-content/log-read',{
+            contentId:self.data.id,
+            businessCategoryId:self.data.businessCategoryId,
+            sessionId:self.data.sessionId
+        }).then(res => {
+            if(res && res.code == 0){
+                // console.log(res)
+            }
+        })
+        self.rewardInfo();
+        //触发领券
+        util.fetch(util.ajaxUrl+'top-content/get-reward',{
+            contentId:self.data.id,
+            businessCategoryId:self.data.businessCategoryId,
+            sessionId:self.data.sessionId
+        }).then(res => {
+            if(res && res.code == 0){
+                self.setData({
+                    bind:true,
+                    alert:2
+                })
+            }
+        })
+    },
+    ctrlBox(){
+        let self = this;
+        self.setData({
+            bind:self.data.bind?false:true
+        })
+    },
+    rewardInfo(){
+        //查询奖励信息
+        let self = this;
+        util.fetch(util.ajaxUrl+'top-content/reward-info',{}).then(res => {
+            if(res && res.code == 0){
+                self.setData({
+                    amount:res.data.amount,
+                    info2:res.data.title
+                })
+            }
+        })
     }
 })
