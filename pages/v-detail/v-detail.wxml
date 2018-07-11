@@ -1,6 +1,31 @@
 <view class="wraper" wx:if="{{pageShown==1}}">
+    <!-- 分享悬浮窗 -->
+    <view class="shareMark" catchtap="showShareBtn" wx:if="{{mark}}">
+        <view class="shareBox" catchtap="stop">
+            <button open-type="share" class="btns btn1">
+                <view class="img">
+                    <image src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></image>
+                </view>
+                <view class="w">微信好友</view>
+            </button>
+            <view class="btns btn2" catchtap="showPic">
+                <view class="img">
+                    <image src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></image>
+                </view>
+                <view class="w">保存图片</view>
+            </view>
+        </view>
+    </view>
+    <!-- 保存图片 -->
+    <view class="savePic" wx:if="{{mark2}}" catchtap="showPic">
+        <view class="pic" catchtap="stop">
+            <view class="close" catchtap="showPic"></view>
+            <image wx:if="{{picUrl}}" src="{{picUrl}}"></image>
+        </view>
+        <view class="saveBtn" catchtap="savePic">保存图片到本地</view>
+    </view>
     <view class="video" wx:if="{{video}}">
-        <video wx:if="{{play && video}}" autoplay objectFit="fill" src="{{video}}"></video>
+        <video wx:if="{{play && video}}" autoplay objectFit="fill" src="{{video}}" bindended="videoEnd" bindplay="bindplay"></video>
         <image src="{{smallPic}}" wx:if="{{!play}}" catchtap="play"></image>
         <view class="icon" wx:if="{{!play && video}}" catchtap="play"></view>
     </view>
@@ -28,9 +53,38 @@
             </view>
         </view>
     </scroll-view>
+    <!-- 分享 -->
+    <view class="shareBtn" catchtap="showShareBtn" wx:if="{{sessionId}}"></view>
+    <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="shareBtn" wx:if="{{!sessionId}}" data-from="2"></button>
     <!-- 点赞 -->
     <view class="praise{{isLike?' on':''}}" catchtap="getHeart">
         {{likeCount}}
-        <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-id="{{item.id}}"></button>
+        <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-from="1" data-id="{{item.id}}"></button>
+    </view>
+</view>
+<!-- 弹窗输入框 -->
+<view class="alertBox" wx:if="{{bind}}">
+    <view class="box" catchtap="stop">
+        <view class="close" catchtap="ctrlBox"></view>
+        <view class="imgs"><image class="t1" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></image>
+        </view>
+        <view class="price"><text>￥</text>{{amount}}</view>
+        <view class="w">{{info2}}</view>
+        <view class="phone item" wx:if="{{alert==1}}">
+            <view class="left">
+                <input type="number" placeholder="请输入手机号" bindinput="getPhone" maxlength="11" />
+            </view>
+            <view class="right" catchtap="send" wx:if="{{status==1}}">获取验证码</view>
+            <view class="right on" catchtap="send" wx:if="{{status==2}}">重新发送</view>
+            <view class="right timer" wx:if="{{status==3}}">已发送({{timer}}s)</view>
+        </view>
+        <view class="randcode item" wx:if="{{alert==1}}">
+            <input type="number" placeholder="请输入验证码" bindinput="getCode" />
+        </view>
+        <view class="get" catchtap="goUpload" wx:if="{{alert==1}}">我要领取</view>
+        <view class="main" wx:if="{{alert==2}}">
+            <view class="copyright">可去日日煮APP“我的-优惠券”查看</view>
+            <view class="go" catchtap="downLoad">去使用</view>
+        </view>
     </view>
 </view>

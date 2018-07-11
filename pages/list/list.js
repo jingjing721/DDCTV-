@@ -6,6 +6,15 @@ Page({
         list:[],
         page:1,             //页数
         next:true,          //是否可以加载下一页
+        invite:'',            //邀请人用户ID
+        userId:'',            //当前用户ID
+        mark:false,           //选择发给朋友，还是朋友圈
+        mark2:false,          //显示保存本地图片的弹窗
+        picUrl:'',            //弹窗图片
+        bind:false,           //是否显示绑定图片弹窗
+        status:1,             //验证码发送状态
+        timer:60,             //倒计时剩余时间
+        alert:1
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
@@ -67,8 +76,20 @@ Page({
             })
         }
     },
+    videoEnd(e){
+        //视频播放完毕埋点
+        let self = this;
+        let id = e.currentTarget.dataset.id;
+        let _filter = self.data.list.filter(item => item.id == id)[0];
+        if(_filter.video){
+            wx.reportAnalytics('video_end', {
+                video_name: _filter.title,
+            })
+        }
+    },
     play(e){
         //是否播放
+        let self = this;
         let id = e.currentTarget.dataset.id;
         let list = this.data.list;
         list.map(item => item.showVideo = item.id == id?true:false);
@@ -77,9 +98,24 @@ Page({
             this.setData({
                 list:list
             })
+            self.setData({
+                id:_filter.id,
+                businessCategoryId:_filter.businessCategoryId
+            })
+            //埋点(视频开始播放)
+            wx.reportAnalytics('video_begin', {
+                video_name: _filter.title,
+            })
         }else{
             this.goDetail(e)
         }
+    },
+    bindplay(){
+        //开始播放视频
+        let self = this;
+        setTimeout(() => {
+            self.readyToCoupon();
+        },30000)
     },
     goHeart(e,from){
         //点赞
@@ -97,11 +133,13 @@ Page({
                             //点赞
                             item.isLike = 1;
                             item.likeCount++;
+                            wx.reportAnalytics('like_add', {});
                         }else{
                             //取消点赞
                             item.isLike = 0;
                             item.likeCount--;
                             if(item.likeCount <= 0) item.likeCount = 0;
+                            wx.reportAnalytics('like_cancel', {});
                         }
                     }
                 })
@@ -132,6 +170,7 @@ Page({
     onGotUserInfo(res){
         //获取code值
         let self = this;
+        let from = res.target.dataset.from;     //1 点赞   2分享
         wx.login({
             success(res2){
                 if(res.detail.errMsg.indexOf('ok') > -1){
@@ -145,7 +184,25 @@ Page({
                             self.setData({
                                 sessionId:res3.data.session
                             })
-                            self.goHeart(res,1)
+                            //将sessionId转换为userId
+                            util.transform(self.data.sessionId).then(userId => {
+                                if(userId){
+                                    self.setData({
+                                        userId:userId
+                                    })
+                                    //调用拉新接口
+                                    if(self.data.invite && self.data.userId && self.data.sessionId){
+                                        util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
+                                    }
+                                }
+                            })
+                            if(from == 1){
+                                //点赞
+                               self.goHeart(res,1) 
+                            }else{
+                                //显示分享悬浮窗
+                                self.showShareBtn()
+                            }
                         }else{
                             wx.hideToast();
                             let msg;
@@ -260,6 +317,13 @@ Page({
         self.setData({
             cateId:e.cateId?e.cateId:0
         })
+        //分享进来携带的上一个用户的信息
+        if(e && e.scene){
+            let scene = decodeURIComponent(e.scene);
+            self.setData({
+                invite:scene
+            })
+        }
         wx.setNavigationBarTitle({
             title:e.title?e.title:'DDCTV'
         })
@@ -274,7 +338,177 @@ Page({
             self.setData({
                 sessionId:sessionId
             })
+            //将sessionId转换为userId
+            if(sessionId){
+                util.transform(sessionId).then(userId => {
+                    if(userId){
+                        self.setData({
+                            userId:userId
+                        })
+                        //调用拉新接口
+                        if(self.data.invite && self.data.userId && self.data.sessionId){
+                            util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
+                        }
+                    }
+                })
+            }
             self.init()
+        })
+    },
+    stop(){},
+    showPic(){
+        //控制是否显示朋友圈的图片
+        let self = this;
+        self.setData({
+            mark2:self.data.mark2?false:true
+        })
+        if(self.data.mark2){
+            self.setData({
+                mark:false
+            })
+        }
+        if(self.data.mark2 && !self.data.picUrl){
+            //生成图片
+            wx.showToast({
+                title:'',
+                icon:'loading',
+                duration:15000
+            })
+            util.createQRcode(self.data.sessionId,self.data.userId)
+            .then(picUrl => {
+                wx.hideToast();
+                if(picUrl){
+                    self.setData({
+                        picUrl:picUrl
+                    })
+                }else{
+                    wx.showModal({
+                        title:'温馨提示',
+                        content:'获取图片失败，请返回重试'
+                    })
+                }
+            })
+        }
+    },
+    savePic(){
+        //保存图片
+        let self = this;
+        if(!self.data.picUrl){
+            wx.showModal({
+                title:'温馨提示',
+                content:'请耐心等待图片生成完毕'
+            })
+            return
+        }
+        wx.showToast({
+            title:'',
+            icon:'loading',
+            duration:15000
+        })
+        wx.getImageInfo({
+            src:self.data.picUrl,
+            success(res){
+                wx.saveImageToPhotosAlbum({
+                    filePath:res.path,
+                    success(res){
+                        wx.showToast({
+                            icon:'success',
+                            title:'保存成功'
+                        })
+                    },
+                    fail(res){
+                        wx.showToast({
+                            icon:'success',
+                            title:'保存失败'
+                        })
+                    },
+                    complete(res){
+                        self.setData({
+                            mark:false,
+                            mark2:false
+                        })
+                    }
+                })
+            }
+        })
+    },
+    showShareBtn(){
+        //是否显示分享按钮
+        let self = this;
+        self.setData({
+            mark:self.data.mark?false:true
+        })
+    },
+    onShareAppMessage(){
+        let self = this;
+        //转发分享
+        return {
+            title:'DDCTV',
+            path:'/pages/index/index?scene='+self.data.userId
+        }
+    },
+    readyToCoupon(){
+        //判断否可去领券
+        let self = this;
+        if(self.data.sessionId){
+            util.isBind(self.data.sessionId)
+            .then(res => {
+                if(res){
+                    //已绑定手机号码
+                    self.getCoupon();
+                }else{
+                    //弹窗需要绑定手机号码
+                    self.rewardInfo();
+                    self.setData({
+                        bind:true
+                    })
+                }
+            })
+        }
+    },
+    getCoupon(){
+        //记录阅读信息
+        let self = this;
+        util.fetch(util.ajaxUrl+'top-content/log-read',{
+            contentId:self.data.id,
+            businessCategoryId:self.data.businessCategoryId,
+            sessionId:self.data.sessionId
+        }).then(res => {
+            if(res && res.code == 0){
+                // console.log(res)
+            }
+        })
+        self.rewardInfo();
+        //触发领券
+        util.fetch(util.ajaxUrl+'top-content/get-reward',{
+            contentId:self.data.id,
+            businessCategoryId:self.data.businessCategoryId,
+            sessionId:self.data.sessionId
+        }).then(res => {
+            if(res && res.code == 0){
+                self.setData({
+                    bind:true,
+                    alert:2
+                })
+            }
+        })
+    },
+    ctrlBox(){
+        let self = this;
+        self.setData({
+            bind:self.data.bind?false:true
+        })
+    },
+    rewardInfo(){
+        //查询奖励信息
+        let self = this;
+        util.fetch(util.ajaxUrl+'top-content/reward-info',{}).then(res => {
+            if(res && res.code == 0){
+                self.setData({
+                    amount:res.data.amount,
+                    info2:res.data.title
+                })
+            }
         })
     }
 })
