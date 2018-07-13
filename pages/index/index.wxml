@@ -13,14 +13,11 @@
                 <view class="num" wx:if="{{!item.showVideo}}"><view class="inner"></view></view>
             </view>
             <view class="content">
-                <view class="title one-line" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.title}}</view>
+                <view class="title two-line" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.title}}</view>
                 <view class="desc" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.summary}}</view>
                 <view class="control">
-                    <view class="info" wx:if="{{index==0 && info}}">分享新用户、观看内容得优惠券</view>
-                    <view class="right share" wx:if="{{sessionId}}" catchtap="showShareBtn"></view>
-                    <view class="right share" wx:if="{{!sessionId}}">
-                        <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-from="2" hover-class="noBg" data-id="{{item.id}}"></button>
-                    </view>
+                    <!-- <view class="info" wx:if="{{index==0 && info}}">分享新用户、观看内容得优惠券</view> -->
+                    <view class="right share" catchtap="showShareBtn"></view>
                     <view class="right heart{{item.isLike?' on':''}}" catchtap="goHeart" data-id="{{item.id}}">
                         {{item.likeCount}}
                         <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-from="1" data-id="{{item.id}}" hover-class="noBg"></button>
@@ -40,14 +37,11 @@
                     <view class="time" wx:if="{{!item.showVideo && item.video}}">{{item.videoDuration}}</view>
                 </view>
                 <view class="content">
-                    <view class="title one-line" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.title}}</view>
+                    <view class="title two-line" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.title}}</view>
                     <view class="desc" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.summary}}</view>
                     <view class="control">
                         <view class="info" wx:if="{{index==0 && info}}">分享新用户、观看内容得优惠券</view>
-                        <view class="right share" wx:if="{{sessionId}}" catchtap="showShareBtn"></view>
-                        <view class="right share" wx:if="{{!sessionId}}">
-                            <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" hover-class="noBg" data-from="2" data-id="{{item.id}}"></button>
-                        </view>
+                        <view class="right share" catchtap="showShareBtn"></view>
                         <view class="right heart{{item.isLike?' on':''}}" catchtap="goHeart" data-id="{{item.id}}">
                             {{item.likeCount}}
                             <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" hover-class="noBg" class="myButton" data-from="1" data-id="{{item.id}}"></button>

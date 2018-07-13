@@ -79,17 +79,17 @@ Page({
                                 sessionId:res3.data.session
                             })
                             //将sessionId转换为userId
-                            util.transform(self.data.sessionId).then(userId => {
-                                if(userId){
-                                    self.setData({
-                                        userId:userId
-                                    })
-                                    //调用拉新接口
-                                    if(self.data.invite && self.data.userId && self.data.sessionId){
-                                        util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
-                                    }
-                                }
-                            })
+                            // util.transform(self.data.sessionId).then(userId => {
+                            //     if(userId){
+                            //         self.setData({
+                            //             userId:userId
+                            //         })
+                            //         //调用拉新接口
+                            //         if(self.data.invite && self.data.userId && self.data.sessionId){
+                            //             util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
+                            //         }
+                            //     }
+                            // })
                             if(from == 1){
                                 //点赞
                                self.getHeart(1)
@@ -172,6 +172,7 @@ Page({
     },
     bindplay(){
         //开始播放视频
+        return
         let self = this;
         self.timeCount = setTimeout(() => {
             //记录一下，当返回首页的时候提示
@@ -213,15 +214,15 @@ Page({
                         contentFoodList:res.data.contentFoodList,
                         tagList:res.data.tagList
                     })
-                    if(!self.data.video){
-                        //没视频的时候，倒计时30s后发券
-                        self.timeCount = setTimeout(() => {
-                            //记录一下，当返回首页的时候提示
-                            wx.setStorageSync('alertInfo',1);
-                            wx.setStorageSync('alertId',self.data.id);
-                            wx.setStorageSync('alertBusinessCategoryId',self.data.businessCategoryId);
-                        },30000)
-                    }
+                    // if(!self.data.video){
+                    //     //没视频的时候，倒计时30s后发券
+                    //     self.timeCount = setTimeout(() => {
+                    //         //记录一下，当返回首页的时候提示
+                    //         wx.setStorageSync('alertInfo',1);
+                    //         wx.setStorageSync('alertId',self.data.id);
+                    //         wx.setStorageSync('alertBusinessCategoryId',self.data.businessCategoryId);
+                    //     },30000)
+                    // }
                 }else{
                     wx.showModal({
                         title:'温馨提示',
@@ -255,19 +256,19 @@ Page({
                 sessionId:sessionId
             })
             //将sessionId转换为userId
-            if(sessionId){
-                util.transform(sessionId).then(userId => {
-                    if(userId){
-                        self.setData({
-                            userId:userId
-                        })
-                        //调用拉新接口
-                        if(self.data.invite && self.data.userId && self.data.sessionId){
-                            util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
-                        }
-                    }
-                })
-            }
+            // if(sessionId){
+            //     util.transform(sessionId).then(userId => {
+            //         if(userId){
+            //             self.setData({
+            //                 userId:userId
+            //             })
+            //             //调用拉新接口
+            //             if(self.data.invite && self.data.userId && self.data.sessionId){
+            //                 util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
+            //             }
+            //         }
+            //     })
+            // }
             self.init();
         })
     },

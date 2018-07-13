@@ -54,8 +54,7 @@
         </view>
     </scroll-view>
     <!-- 分享 -->
-    <view class="shareBtn" catchtap="showShareBtn" wx:if="{{sessionId}}"></view>
-    <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="shareBtn" wx:if="{{!sessionId}}" data-from="2" hover-class="noBg"></button>
+    <view class="shareBtn" catchtap="showShareBtn"></view>
     <!-- 点赞 -->
     <view class="praise{{isLike?' on':''}}" catchtap="getHeart">
         {{likeCount}}

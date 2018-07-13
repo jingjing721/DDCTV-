@@ -28,6 +28,7 @@ button::after{
 }
 
 .two-line {
+    line-height: 1.25;
     display: -webkit-box; 
     overflow: hidden;
     -webkit-text-overflow: ellipsis;

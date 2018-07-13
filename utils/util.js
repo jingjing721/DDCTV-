@@ -187,8 +187,8 @@ let createQRcode = (sessionId,userId) => {
             duration:30000
         })
         fetch(ajaxUrl+'wechat/generate',{
-            sessionId:sessionId,
-            uid:userId
+            // sessionId:sessionId,
+            // uid:userId
         }).then(res => {
             wx.hideToast();
             if(res && res.code == 0 && res.message){

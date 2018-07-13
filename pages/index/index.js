@@ -94,6 +94,8 @@ Page({
                         item.videoDuration = util.changeTime(item.videoDuration);   //将视频播放时长修改为12:34格式
                         historyList.push(item)
                     })
+                    // console.log(historyList)
+                    // historyList[1].title = '';
                     self.setData({
                         historyList:historyList,
                         myDate:res.lastDate?res.lastDate:''
@@ -229,17 +231,17 @@ Page({
                                 sessionId:res3.data.session
                             })
                             //将sessionId转换为userId
-                            util.transform(self.data.sessionId).then(userId => {
-                                if(userId){
-                                    self.setData({
-                                        userId:userId
-                                    })
-                                    //调用拉新接口
-                                    if(self.data.invite && self.data.userId && self.data.sessionId){
-                                        util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
-                                    }
-                                }
-                            })
+                            // util.transform(self.data.sessionId).then(userId => {
+                            //     if(userId){
+                            //         self.setData({
+                            //             userId:userId
+                            //         })
+                            //         //调用拉新接口
+                            //         if(self.data.invite && self.data.userId && self.data.sessionId){
+                            //             util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
+                            //         }
+                            //     }
+                            // })
                             if(from == 1){
                                 //点赞
                                self.goHeart(res,1) 
@@ -496,20 +498,20 @@ Page({
         self.refreshTen();
 
         //从别的页面返回的时候，判断是否需要提示是否有券需要领取
-        let alertInfo = wx.getStorageSync('alertInfo');
-        let alertId = wx.getStorageSync('alertId');
-        let alertBusinessCategoryId = wx.getStorageSync('alertBusinessCategoryId');
-        if(alertInfo && alertId && alertBusinessCategoryId){
-            self.setData({
-                id:alertId,
-                businessCategoryId:alertBusinessCategoryId
-            })
-            wx.removeStorageSync('alertInfo');
-            wx.removeStorageSync('alertId');
-            wx.removeStorageSync('alertBusinessCategoryId');
-            //触发领券
-            self.readyToCoupon();
-        }
+        // let alertInfo = wx.getStorageSync('alertInfo');
+        // let alertId = wx.getStorageSync('alertId');
+        // let alertBusinessCategoryId = wx.getStorageSync('alertBusinessCategoryId');
+        // if(alertInfo && alertId && alertBusinessCategoryId){
+        //     self.setData({
+        //         id:alertId,
+        //         businessCategoryId:alertBusinessCategoryId
+        //     })
+        //     wx.removeStorageSync('alertInfo');
+        //     wx.removeStorageSync('alertId');
+        //     wx.removeStorageSync('alertBusinessCategoryId');
+        //     //触发领券
+        //     self.readyToCoupon();
+        // }
     },
     onLoad(e){
         let self = this;
@@ -544,19 +546,19 @@ Page({
                 }
             }
             //将sessionId转换为userId
-            if(sessionId){
-                util.transform(sessionId).then(userId => {
-                    if(userId){
-                        self.setData({
-                            userId:userId
-                        })
-                        //调用拉新接口
-                        if(self.data.invite && self.data.userId && self.data.sessionId){
-                            util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
-                        }
-                    }
-                })
-            }
+            // if(sessionId){
+            //     util.transform(sessionId).then(userId => {
+            //         if(userId){
+            //             self.setData({
+            //                 userId:userId
+            //             })
+            //             //调用拉新接口
+            //             if(self.data.invite && self.data.userId && self.data.sessionId){
+            //                 util.pullNew(self.data.sessionId,self.data.userId,self.data.invite)
+            //             }
+            //         }
+            //     })
+            // }
             self.init()
         })
     },
@@ -576,6 +578,7 @@ Page({
     },
     lastDay(){
         //获取昨日领取情况
+        return
         let self = this;
         if(self.data.sessionId){
             util.fetch(util.ajaxUrl+'top-content/yesterday-reward',{
@@ -682,8 +685,9 @@ Page({
         let self = this;
         //转发分享
         return {
-            title:'DDCTV',
-            path:'/pages/index/index?scene='+self.data.userId
+            // title:'DDCTV',
+            // path:'/pages/index/index?scene='+self.data.userId
+            path:'/pages/index/index'
         }
     },
     readyToCoupon(){
