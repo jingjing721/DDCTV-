@@ -11,14 +11,9 @@ Page({
         mark:false,           //选择发给朋友，还是朋友圈
         mark2:false,          //显示保存本地图片的弹窗
         picUrl:'',            //弹窗图片
-        bind:false,           //是否显示绑定图片弹窗
-        status:1,             //验证码发送状态
-        timer:60,             //倒计时剩余时间
-        alert:1
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
-        console.log('加载下一页')
         let self = this;
         if(self.data.next) self.init();
     },
@@ -113,8 +108,11 @@ Page({
     bindplay(){
         //开始播放视频
         let self = this;
-        setTimeout(() => {
-            self.readyToCoupon();
+        self.timeCount = setTimeout(() => {
+            //记录一下，当返回首页的时候提示
+            wx.setStorageSync('alertInfo',1);
+            wx.setStorageSync('alertId',self.data.id);
+            wx.setStorageSync('alertBusinessCategoryId',self.data.businessCategoryId);
         },30000)
     },
     goHeart(e,from){
@@ -170,6 +168,11 @@ Page({
     onGotUserInfo(res){
         //获取code值
         let self = this;
+        wx.showToast({
+            title:'',
+            icon:'loading',
+            duration:15000
+        })
         let from = res.target.dataset.from;     //1 点赞   2分享
         wx.login({
             success(res2){
@@ -179,6 +182,7 @@ Page({
                         iv:res.detail.iv,
                         code:res2.code
                     }).then(res3 => {
+                        wx.hideToast();
                         if(res3 && res3.code == 1){
                             wx.setStorageSync('sessionId',res3.data.session);
                             self.setData({
@@ -311,6 +315,12 @@ Page({
     onShow(){
         this.refreshLikeCount();
     },
+    onUnload(){
+        let self = this;
+        if(self.timeCount){
+            clearTimeout(self.timeCount);
+        }
+    },
     onLoad(e){
         //设置页面标题
         let self = this;
@@ -368,15 +378,8 @@ Page({
             })
         }
         if(self.data.mark2 && !self.data.picUrl){
-            //生成图片
-            wx.showToast({
-                title:'',
-                icon:'loading',
-                duration:15000
-            })
             util.createQRcode(self.data.sessionId,self.data.userId)
             .then(picUrl => {
-                wx.hideToast();
                 if(picUrl){
                     self.setData({
                         picUrl:picUrl
@@ -446,69 +449,5 @@ Page({
             title:'DDCTV',
             path:'/pages/index/index?scene='+self.data.userId
         }
-    },
-    readyToCoupon(){
-        //判断否可去领券
-        let self = this;
-        if(self.data.sessionId){
-            util.isBind(self.data.sessionId)
-            .then(res => {
-                if(res){
-                    //已绑定手机号码
-                    self.getCoupon();
-                }else{
-                    //弹窗需要绑定手机号码
-                    self.rewardInfo();
-                    self.setData({
-                        bind:true
-                    })
-                }
-            })
-        }
-    },
-    getCoupon(){
-        //记录阅读信息
-        let self = this;
-        util.fetch(util.ajaxUrl+'top-content/log-read',{
-            contentId:self.data.id,
-            businessCategoryId:self.data.businessCategoryId,
-            sessionId:self.data.sessionId
-        }).then(res => {
-            if(res && res.code == 0){
-                // console.log(res)
-            }
-        })
-        self.rewardInfo();
-        //触发领券
-        util.fetch(util.ajaxUrl+'top-content/get-reward',{
-            contentId:self.data.id,
-            businessCategoryId:self.data.businessCategoryId,
-            sessionId:self.data.sessionId
-        }).then(res => {
-            if(res && res.code == 0){
-                self.setData({
-                    bind:true,
-                    alert:2
-                })
-            }
-        })
-    },
-    ctrlBox(){
-        let self = this;
-        self.setData({
-            bind:self.data.bind?false:true
-        })
-    },
-    rewardInfo(){
-        //查询奖励信息
-        let self = this;
-        util.fetch(util.ajaxUrl+'top-content/reward-info',{}).then(res => {
-            if(res && res.code == 0){
-                self.setData({
-                    amount:res.data.amount,
-                    info2:res.data.title
-                })
-            }
-        })
     }
 })

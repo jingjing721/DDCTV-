@@ -13,10 +13,6 @@ Page({
         mark:false,           //选择发给朋友，还是朋友圈
         mark2:false,          //显示保存本地图片的弹窗
         picUrl:'',            //弹窗图片
-        bind:false,           //是否显示绑定图片弹窗
-        status:1,             //验证码发送状态
-        timer:60,             //倒计时剩余时间
-        alert:1
     },
     getHeart(from){
         //点赞
@@ -64,6 +60,11 @@ Page({
     onGotUserInfo(res){
         //获取code值
         let self = this;
+        wx.showToast({
+            title:'',
+            icon:'loading',
+            duration:15000
+        })
         let from = res.target.dataset.from;     //1 点赞   2分享
         wx.login({
             success(res2){
@@ -73,6 +74,7 @@ Page({
                         iv:res.detail.iv,
                         code:res2.code
                     }).then(res3 => {
+                        wx.hideToast();
                         if(res3 && res3.code == 1){
                             wx.setStorageSync('sessionId',res3.data.session);
                             self.setData({
@@ -174,9 +176,18 @@ Page({
     bindplay(){
         //开始播放视频
         let self = this;
-        setTimeout(() => {
-            self.readyToCoupon();
+        self.timeCount = setTimeout(() => {
+            //记录一下，当返回首页的时候提示
+            wx.setStorageSync('alertInfo',1);
+            wx.setStorageSync('alertId',self.data.id);
+            wx.setStorageSync('alertBusinessCategoryId',self.data.businessCategoryId);
         },30000)
+    },
+    onUnload(){
+        let self = this;
+        if(self.timeCount){
+            clearTimeout(self.timeCount);
+        }
     },
     init(){
         //请求详情
@@ -213,8 +224,11 @@ Page({
                     })
                     if(!self.data.video){
                         //没视频的时候，倒计时30s后发券
-                        setTimeout(() => {
-                            if(self.data.sessionId) self.readyToCoupon();
+                        self.timeCount = setTimeout(() => {
+                            //记录一下，当返回首页的时候提示
+                            wx.setStorageSync('alertInfo',1);
+                            wx.setStorageSync('alertId',self.data.id);
+                            wx.setStorageSync('alertBusinessCategoryId',self.data.businessCategoryId);
                         },30000)
                     }
                 }else{
@@ -266,192 +280,6 @@ Page({
             self.init()
         })
     },
-    getPhone(e){
-        //获取手机号码
-        let self = this;
-        if(util.isPhone(e.detail.value)){
-            self.setData({
-                phone:e.detail.value
-            })
-        }
-    },
-    getCode(e){
-        //获取验证码
-        this.setData({
-            randCode:e.detail.value
-        })
-    },
-    send(){
-        //发送验证码
-        let self = this;
-        if(self.data.phone){
-            wx.showToast({
-                title:'',
-                icon:'loading',
-                duration:15000
-            })
-            util.fetch(util.ajaxUrl2+'/member/smsCode',{
-                mobile:self.data.phone
-            }).then(res => {
-                wx.hideToast();
-                if(res && res.code == 1){
-                    wx.showToast({
-                        title:'发送成功',
-                        icon:'success',
-                        duration:1500
-                    })
-                    self.timer();
-                    self.setData({
-                        status:3
-                    })
-                }else{
-                    let msg = '';
-                    switch(res.code){
-                        case 0:msg = '错误';break;
-                        case 2:msg = '请求参数错误';break;
-                        case 10005:msg = '短信发送异常';break;
-                        case 10013:msg = '1分钟内只能发送一次';break;
-                        default:msg = '未知错误';
-                    }
-                    wx.showModal({
-                        title:'温馨提示',
-                        content:msg
-                    })
-                }
-            })
-        }
-    },
-    goUpload(){
-        //绑定手机号码
-        let self = this;
-        if(self.data.phone && self.data.randCode){
-            wx.showToast({
-                title:'',
-                icon:'loading',
-                duration:15000
-            })
-            util.fetch(util.ajaxUrl2+'/member/bind',{
-                mobile:self.data.phone,
-                smsCode:self.data.randCode,
-                session:self.data.sessionId
-            }).then(res => {
-                wx.hideToast();
-                if(res && res.code == 1){
-                    wx.showToast({
-                        title:'绑定成功',
-                        icon:'success',
-                        duration:1500
-                    })
-                    self.getCoupon();
-                    self.setData({
-                        status:1
-                    })
-                }else{
-                    let msg = '';
-                    switch(res.code){
-                        case 0:msg = '错误';break;
-                        case 2:msg = '请求参数错误';break;
-                        case 10000:msg = '用户未登录';break;
-                        case 10001:msg = '手机号已被注册';break;
-                        case 10002:msg = '手机号已被绑定';break;
-                        case 10004:msg = '验证码错误';break;
-                        case 10010:msg = '用户已经绑定过手机';break;
-                        default:msg = '未知错误';
-                    }
-                    wx.showModal({
-                        title:'温馨提示',
-                        content:msg
-                    })
-                }
-            })
-        }
-    },
-    ctrlBox(){
-        let self = this;
-        self.setData({
-            bind:self.data.bind?false:true
-        })
-    },
-    timer(){
-        //开始倒计时
-        let self = this;
-        let timer = setInterval(() => {
-            if(self.data.timer < 2) {
-                self.setData({
-                    status:2,
-                    timer:60
-                })
-                clearInterval(timer)
-            }
-            self.setData({
-                timer:self.data.timer-1
-            })
-        },1000)
-    },
-    getCoupon(){
-        //记录阅读信息
-        let self = this;
-        util.fetch(util.ajaxUrl+'top-content/log-read',{
-            contentId:self.data.id,
-            businessCategoryId:self.data.businessCategoryId,
-            sessionId:self.data.sessionId
-        }).then(res => {
-            if(res && res.code == 0){
-                // console.log(res)
-            }
-        })
-        self.rewardInfo();
-        //触发领券
-        util.fetch(util.ajaxUrl+'top-content/get-reward',{
-            contentId:self.data.id,
-            businessCategoryId:self.data.businessCategoryId,
-            sessionId:self.data.sessionId
-        }).then(res => {
-            if(res && res.code == 0){
-                self.setData({
-                    bind:true,
-                    alert:2
-                })
-            }
-        })
-    },
-    downLoad(){
-        wx.showModal({
-            title:'',
-            content:'请前往应用商店下载日日煮APP'
-        })
-    },
-    rewardInfo(){
-        //查询奖励信息
-        let self = this;
-        util.fetch(util.ajaxUrl+'top-content/reward-info',{}).then(res => {
-            if(res && res.code == 0){
-                self.setData({
-                    amount:res.data.amount,
-                    info2:res.data.title
-                })
-            }
-        })
-    },
-    readyToCoupon(){
-        //判断否可去领券
-        let self = this;
-        if(self.data.sessionId){
-            util.isBind(self.data.sessionId)
-            .then(res => {
-                if(res){
-                    //已绑定手机号码
-                    self.getCoupon();
-                }else{
-                    //弹窗需要绑定手机号码
-                    self.rewardInfo();
-                    self.setData({
-                        bind:true
-                    })
-                }
-            })
-        }
-    },
     stop(){},
     showPic(){
         //控制是否显示朋友圈的图片
@@ -465,15 +293,8 @@ Page({
             })
         }
         if(self.data.mark2 && !self.data.picUrl){
-            //生成图片
-            wx.showToast({
-                title:'',
-                icon:'loading',
-                duration:15000
-            })
             util.createQRcode(self.data.sessionId,self.data.userId)
             .then(picUrl => {
-                wx.hideToast();
                 if(picUrl){
                     self.setData({
                         picUrl:picUrl

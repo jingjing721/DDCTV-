@@ -110,7 +110,10 @@ button::after{
 }
 
 button:hover{
-    background:none;
+    /* background:none; */
+}
+.noBg{
+    background: none;
 }
 .savePic{
     position: fixed;
