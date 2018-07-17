@@ -246,6 +246,12 @@ Page({
             }
         })
     },
+    goHome(){
+        //返回首页
+        wx.redirectTo({
+            url:'../index/index'
+        })
+    },
     onShow(){},
     onLoad(e){
         let self = this;
@@ -257,7 +263,8 @@ Page({
         self.setData({
             businessCategoryId:Number(e.businessCategoryId),
             id:Number(e.id),
-            invite:e.invite
+            invite:e.invite,
+            backHome:getCurrentPages().length==1?true:false
         })
         util.isLogin().then(sessionId => {
             //若sessionId值为空，则没登录，否则已登录

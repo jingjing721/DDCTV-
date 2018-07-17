@@ -53,6 +53,8 @@
             </view>
         </view>
     </scroll-view>
+    <!-- 返回首页 -->
+    <view class="backHome" catchtap="goHome" wx:if="{{backHome}}"></view>
     <!-- 分享 -->
     <view class="shareBtn" catchtap="showShareBtn"></view>
     <!-- 点赞 -->

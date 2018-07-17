@@ -54,6 +54,8 @@
             </view>
         </view>
     </scroll-view>
+    <!-- 返回首页 -->
+    <view class="backHome" catchtap="goHome" wx:if="{{backHome}}"></view>
     <!-- 分享 -->
     <view class="shareBtn" catchtap="showShareBtn"></view>
     <!-- <button open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="shareBtn" wx:if="{{!sessionId}}" data-from="2" hover-class="noBg"></button> -->
