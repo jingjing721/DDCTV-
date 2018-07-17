@@ -186,7 +186,6 @@ Page({
                 wx.hideToast();
                 if(res){
                     //点赞成功(获取真实点赞数据)
-                    // console.log(res)
                     currentList.map(item => {
                         if(item.id == id){
                             item.isLike = res.data.isLike;

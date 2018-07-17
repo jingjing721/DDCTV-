@@ -173,8 +173,8 @@
 	right: -20rpx;
 	bottom: -20rpx;
 	width: 200rpx;
-	height: 100rpx;
-	padding-top: 100rpx;
+	height: 108rpx;
+	padding-top: 92rpx;
 	border-radius: 50%;
 	font-size: 24rpx;
 	color: #A5A4A4;

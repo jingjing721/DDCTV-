@@ -6,6 +6,7 @@
         <view class="list-title" wx:if="{{currentList.length > 0}}">今日十见</view>
         <view class="item" wx:for="{{currentList}}" wx:key="key" wx:if="{{item.state==1}}">
             <view class="video">
+                <view class="video-mark" wx:if="{{!item.showVideo && item.video}}" catchtap="play"  data-indexId="{{item.indexId}}" data-id="{{item.id}}"></view>
                 <video wx:if="{{item.showVideo && item.video}}" autoplay objectFit="fill" src="{{item.video}}" data-indexId="{{item.indexId}}" data-id="{{item.id}}" bindended="videoEnd"></video>
                 <image wx:else src="{{item.smallPic}}" catchtap="play" data-businessCategoryId="{{item.businessCategoryId}}" data-indexId="{{item.indexId}}" data-id="{{item.id}}"></image>
                 <view class="icon" wx:if="{{!item.showVideo && item.video}}" catchtap="play"  data-indexId="{{item.indexId}}" data-id="{{item.id}}"></view>
@@ -31,6 +32,7 @@
         <view class="item" wx:for="{{historyList}}" wx:key="key">
             <view wx:if="{{!item.listTitle && item.state==1}}">
                 <view class="video">
+                    <view class="video-mark" wx:if="{{!item.showVideo && item.video}}" catchtap="play"  data-indexId="{{item.indexId}}" data-id="{{item.id}}"></view>
                     <video wx:if="{{item.showVideo && item.video}}" autoplay objectFit="fill" src="{{item.video}}" data-indexId="{{item.indexId}}" data-id="{{item.id}}" bindended="videoEnd"></video>
                     <image wx:else src="{{item.smallPic}}" catchtap="play" data-businessCategoryId="{{item.businessCategoryId}}" data-indexId="{{item.indexId}}" data-id="{{item.id}}"></image>
                     <view class="icon" wx:if="{{!item.showVideo && item.video}}" catchtap="play" data-indexId="{{item.indexId}}" data-id="{{item.id}}"></view>
@@ -50,9 +52,9 @@
                 </view>
             </view>
             <view class="list2-title" wx:else>
-                <view class="date left">{{item.d}}</view>
-                <view class="dot left">•</view>
-                <view class="time left">
+                <view class="date left" wx:if="{{item.d}}">{{item.d}}</view>
+                <view class="dot left" wx:if="{{item.d}}">•</view>
+                <view class="time left" wx:if="{{item.d}}">
                     <view class="year">{{item.y}}</view>
                     <view class="month">{{item.m}}月</view>
                 </view>
