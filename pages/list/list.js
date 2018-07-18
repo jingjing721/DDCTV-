@@ -11,6 +11,58 @@ Page({
         mark:false,           //选择发给朋友，还是朋友圈
         mark2:false,          //显示保存本地图片的弹窗
         picUrl:'',            //弹窗图片
+        shareimageUrl:'',     //分享图片URL
+        sharePath:'/pages/index/index',//分享路径
+        shareTitle:'DDCTV',
+    },
+    showShareBtn(e){
+        //是否显示分享按钮
+        let self = this;
+        self.setData({
+            mark:self.data.mark?false:true
+        })
+        if(e && e.currentTarget.dataset.id){
+            let id = e.currentTarget.dataset.id;
+            let businessCategoryId = e.currentTarget.dataset.businesscategoryid;
+            let _item = self.data.list.filter(item => item.id == id)[0];
+            let sharUrl;
+            if(_item.type == 1){
+                //图文
+                sharUrl = 'pages/v-detail/v-detail?id='+id+'&businessCategoryId='+businessCategoryId;
+            }else if(_item.type == 2){
+                //菜谱
+                sharUrl = 'pages/c-detail/c-detail?id='+id+'&businessCategoryId='+businessCategoryId;
+            }
+            self.setData({
+                sharePath:sharUrl,
+                shareTitle:_item.title,
+                shareimageUrl:_item.smallPic
+            })
+        }else{
+            self.setShareImgUrl()
+        }
+    },
+    onShareAppMessage(){
+        let self = this;
+        //转发分享
+        return {
+            title:self.data.shareTitle,
+            path:self.data.sharePath,
+            imageUrl:self.data.shareimageUrl
+        }
+    },
+    setShareImgUrl(){
+        //取第一个图片作为分享的图片
+        let self = this;
+        let list = self.data.list;
+        list = list.filter(item => item.smallPic);
+        if(list.length > 0){
+            self.setData({
+                shareimageUrl:list[0].smallPic,
+                sharePath:'/pages/index/index',
+                shareTitle:'DDCTV'
+            })
+        }
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
@@ -46,6 +98,7 @@ Page({
                 self.setData({
                     list:list
                 })
+                self.setShareImgUrl();
             }else{
                 wx.showModal({
                     title:'温馨提示',
@@ -435,21 +488,5 @@ Page({
                 })
             }
         })
-    },
-    showShareBtn(){
-        //是否显示分享按钮
-        let self = this;
-        self.setData({
-            mark:self.data.mark?false:true
-        })
-    },
-    onShareAppMessage(){
-        let self = this;
-        //转发分享
-        return {
-            // title:'DDCTV',
-            // path:'/pages/index/index?scene='+self.data.userId
-            path:'/pages/index/index'
-        }
     }
 })

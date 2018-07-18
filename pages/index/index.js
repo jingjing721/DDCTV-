@@ -19,6 +19,63 @@ Page({
         alert:1,
         phone:'',             //手机号码
         randCode:'',          //验证码
+        shareimageUrl:'',     //分享图片URL
+        sharePath:'/pages/index/index',//分享路径
+        shareTitle:'DDCTV',
+    },
+    showShareBtn(e){
+        //是否显示分享按钮
+        let self = this;
+        self.setData({
+            mark:self.data.mark?false:true
+        })
+        if(e && e.currentTarget.dataset.id){
+            let id = e.currentTarget.dataset.id;
+            let businessCategoryId = e.currentTarget.dataset.businesscategoryid;
+            let _item = this.data.currentList.filter(item => item.id == id);
+            if(_item.length > 0){
+                _item = _item[0]
+            }else{
+                _item = this.data.historyList.filter(item => item.id == id)[0]
+            }
+            let sharUrl;
+            if(_item.type == 1){
+                //图文
+                sharUrl = 'pages/v-detail/v-detail?id='+id+'&businessCategoryId='+businessCategoryId;
+            }else if(_item.type == 2){
+                //菜谱
+                sharUrl = 'pages/c-detail/c-detail?id='+id+'&businessCategoryId='+businessCategoryId;
+            }
+            self.setData({
+                shareimageUrl:_item.smallPic,
+                shareTitle:_item.title,
+                sharePath:sharUrl
+            })
+        }else{
+            self.setShareImgUrl();
+        }
+    },
+    onShareAppMessage(){
+        let self = this;
+        //转发分享
+        return {
+            title:self.data.shareTitle,
+            path:self.data.sharePath,
+            imageUrl:self.data.shareimageUrl
+        }
+    },
+    setShareImgUrl(){
+        //取第一个图片作为分享的图片
+        let self = this;
+        let list = self.data.currentList.length>0?self.data.currentList:self.data.historyList;
+        list = list.filter(item => item.smallPic);
+        if(list.length > 0){
+            self.setData({
+                shareimageUrl:list[0].smallPic,
+                shareTitle:'DDCTV',
+                sharePath:'/pages/index/index'
+            })
+        }
     },
     onReachBottom(){
         //页面滚动到底部，加载下一页
@@ -101,6 +158,7 @@ Page({
                         myDate:res.lastDate?res.lastDate:''
                     })
                 }
+                self.setShareImgUrl();
                 //若当天请求没数据，则显示前一天的
                 if(self.data.currentList.length == 0 && self.data.myDate && self.data.init){
                     self.setData({
@@ -328,11 +386,11 @@ Page({
             businessCategoryId:_filter.businessCategoryId
         })
         //调用优惠券
-        if(self.data.sessionId){
-            setTimeout(() => {
-                self.readyToCoupon();
-            },100)
-        }
+        // if(self.data.sessionId){
+        //     setTimeout(() => {
+        //         self.readyToCoupon();
+        //     },100)
+        // }
     },
     play(e){
         //是否播放
@@ -672,22 +730,6 @@ Page({
                 })
             }
         })
-    },
-    showShareBtn(){
-        //是否显示分享按钮
-        let self = this;
-        self.setData({
-            mark:self.data.mark?false:true
-        })
-    },
-    onShareAppMessage(){
-        let self = this;
-        //转发分享
-        return {
-            // title:'DDCTV',
-            // path:'/pages/index/index?scene='+self.data.userId
-            path:'/pages/index/index'
-        }
     },
     readyToCoupon(){
         //判断否可去领券
