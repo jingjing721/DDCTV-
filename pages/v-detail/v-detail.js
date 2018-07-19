@@ -151,6 +151,9 @@ Page({
             }
         })
     },
+    test(){
+        console.log(111)
+    },
     videoEnd(){
         //播放结束
         let self = this;
