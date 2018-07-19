@@ -1,4 +1,9 @@
-let status = 1;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
+let status = 3;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
+
+// if(+new Date() - 1531823041067 > 86400000){
+//     status = 3;
+// }
+
 
 let ajaxUrl  = status==0?'https://tv-d.daydaycook.com.cn/':status==1?'https://tv-t.daydaycook.com.cn/':status==2?'https://tv-s.daydaycook.com.cn/':'https://tv.daydaycook.com.cn/';              //用户、地址
 let ajaxUrl2 = status==0?'https://uc-api-d.daydaycook.com.cn':status==1?'https://uc-api-t.daydaycook.com.cn':status==2?'https://uc-api-s.daydaycook.com.cn':'https://uc-api.daydaycook.com.cn';              //用户、地址
@@ -180,14 +185,20 @@ let pullNew = (sessionId,userId,sponsor) => {
 //生成图片
 let createQRcode = (sessionId,userId) => {
     return new Promise(resolve => {
+        //生成图片
+        wx.showToast({
+            title:'',
+            icon:'loading',
+            duration:30000
+        })
         fetch(ajaxUrl+'wechat/generate',{
-            sessionId:sessionId,
-            uid:userId
+            // sessionId:sessionId,
+            // uid:userId
         }).then(res => {
+            wx.hideToast();
             if(res && res.code == 0 && res.message){
                 resolve(res.message)
             }else{
-                wx.hideToast();
                 resolve('')
                 wx.showModal({
                     title:'温馨提示',
@@ -213,6 +224,17 @@ let isBind = sessionId => {
     })
 }
 
+//触发后台用户绑定手机号码成功
+let bindPhone = (userId,phone,sessionId) => {
+    fetch(ajaxUrl+'top-content/change-bind',{
+        userId:userId,
+        mobile:phone,
+        sessionId:sessionId
+    }).then(res => {
+        //返回数据不做处理
+    })
+}
+
 
 module.exports = {
     ajaxUrl:ajaxUrl,
@@ -230,5 +252,8 @@ module.exports = {
     transform:transform,
     pullNew:pullNew,
     createQRcode:createQRcode,
-    isBind:isBind
+    isBind:isBind,
+    bindPhone:bindPhone
 }
+
+
