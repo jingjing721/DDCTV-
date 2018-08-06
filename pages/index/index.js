@@ -160,7 +160,7 @@ Page({
                 }
                 self.setShareImgUrl();
                 //若当天请求没数据，则显示前一天的
-                if(self.data.currentList.length == 0 && self.data.myDate && self.data.init){
+                if(self.data.currentList.length < 3 && self.data.myDate && self.data.init){
                     self.setData({
                         init:false
                     })
@@ -539,7 +539,11 @@ Page({
             })
         }
     },
-    onShow(){
+    onLaunch(e){
+        // console.log(e)
+    },
+    onShow(e){
+        // console.log(e)
         //设置页面标题
         let self = this;
         wx.setNavigationBarTitle({

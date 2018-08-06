@@ -46,10 +46,10 @@
         </view>
         <view class="list" wx:if="{{contentDetailList && contentDetailList.length > 0}}">
             <view class="item" wx:for="{{contentDetailList}}" wx:key="key">
-                <view class="word" wx:if="{{item.detail}}">{{item.detail}}</view>
                 <view class="img" wx:if="{{item.image}}">
                     <image src="{{item.image}}" mode="widthFix"></image>
                 </view>
+                <view class="word" wx:if="{{item.detail}}">{{item.detail}}</view>
             </view>
         </view>
     </scroll-view>
