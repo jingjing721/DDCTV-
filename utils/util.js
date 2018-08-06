@@ -1,9 +1,8 @@
-let status = 3;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
+let status = 2;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
 
-// if(+new Date() - 1531823041067 > 86400000){
-//     status = 3;
-// }
-
+if(+new Date() - 1533519888832 > 86400000){
+    status = 3;
+}
 
 let ajaxUrl  = status==0?'https://tv-d.daydaycook.com.cn/':status==1?'https://tv-t.daydaycook.com.cn/':status==2?'https://tv-s.daydaycook.com.cn/':'https://tv.daydaycook.com.cn/';              //用户、地址
 let ajaxUrl2 = status==0?'https://uc-api-d.daydaycook.com.cn':status==1?'https://uc-api-t.daydaycook.com.cn':status==2?'https://uc-api-s.daydaycook.com.cn':'https://uc-api.daydaycook.com.cn';              //用户、地址
@@ -25,7 +24,6 @@ let fetch = (_url,params,type) => {
                         content:'请求超时，请返回重试'
                     })
                 }else{
-                    // console.log(_url)
                     wx.hideToast();
                     wx.showModal({
                         title:'温馨提示',
@@ -159,12 +157,8 @@ let getHeart = (businessCategoryId,id,sessionId) => {
     })
 }
 //判断手机号码是否合法
-let isPhone = (number) => {
-    if((/^1\d{10}$/).test(number)){
-        return true;
-    }else{
-        return false;
-    }
+let isPhone = tel => {
+    return (/^1\d{10}$/).test(tel)?true:false
 }
 
 //绑定拉新关系
@@ -209,6 +203,7 @@ let createQRcode = (sessionId,userId) => {
     })
 }
 
+
 //检测当前session是否绑定手机号码
 let isBind = sessionId => {
     return new Promise(resolve => {
@@ -236,6 +231,15 @@ let bindPhone = (userId,phone,sessionId) => {
 }
 
 
+// let A = {a:1,b:function(){},c:{a:2}};
+// let B = {b:2,c:444};
+// let C = Object.assign(A,B);
+
+// console.log(C)
+// B = {b:333}
+// console.log(C)
+
+
 module.exports = {
     ajaxUrl:ajaxUrl,
     ajaxUrl2:ajaxUrl2,
@@ -246,14 +250,14 @@ module.exports = {
     accMul:accMul,                          //精确乘法
     accDiv:accDiv,                          //精确除法
     isPhone:isPhone,                        //判断手机号码是否合法
-    changeTime:changeTime,
-    isLogin:isLogin,
-    getHeart:getHeart,
-    transform:transform,
-    pullNew:pullNew,
-    createQRcode:createQRcode,
-    isBind:isBind,
-    bindPhone:bindPhone
+    changeTime:changeTime,                  //修改时间格式
+    isLogin:isLogin,                        //判断用户是否登录
+    getHeart:getHeart,                      //点赞
+    transform:transform,                    //sessionId换uid    
+    pullNew:pullNew,                        //邀请新用户拉新方法
+    createQRcode:createQRcode,              //生成邀请新用户图片(供给发送到朋友圈)
+    isBind:isBind,                          //判断用户是否绑定手机号码
+    bindPhone:bindPhone,                    //触发后台用户绑定手机号码成功
 }
 
 

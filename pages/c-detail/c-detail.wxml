@@ -47,10 +47,10 @@
         <view class="step" wx:if="{{contentDetailList && contentDetailList.length > 0}}" wx:for="{{contentDetailList}}" wx:key="key">
             <view class="title">{{item.first}}<text>/{{item.last}}</text></view>
             <view class="main">
-                <view class="word">{{item.detail}}</view>
-                <view class="imgs">
+                <view class="imgs" wx:if="{{item.image}}">
                     <image wx:if="{{item.image}}" src="{{item.image}}" mode="widthFix"></image>
                 </view>
+                <view class="word" wx:if="{{item.detail}}">{{item.detail}}</view>
             </view>
         </view>
     </scroll-view>
