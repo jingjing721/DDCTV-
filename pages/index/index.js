@@ -159,8 +159,8 @@ Page({
                     })
                 }
                 self.setShareImgUrl();
-                //若当天请求没数据，则显示前一天的
-                if(self.data.currentList.length < 3 && self.data.myDate && self.data.init){
+                //若当天请求没数据，则显示前一天的 或 首次显示到页面的数据低于3条的(防止页面没法滑动)
+                if((self.data.currentList.length < 3 && self.data.myDate && self.data.init) || (self.data.myDate && !self.data.init && self.data.historyList.length < 3)){
                     self.setData({
                         init:false
                     })
