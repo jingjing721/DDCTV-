@@ -11,7 +11,7 @@ Page({
         userId:'',            //当前用户ID
         mark:false,           //选择发给朋友，还是朋友圈
         mark2:false,          //显示保存本地图片的弹窗
-        picUrl:'',            //弹窗图片
+        picUrl:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',            //弹窗图片
         lastDay:false,        //控制是否显示昨日领券弹窗
         bind:false,           //是否显示绑定图片弹窗
         status:1,             //验证码发送状态
@@ -48,7 +48,8 @@ Page({
         self.setData({
             shareimageUrl:_item.smallPic,
             shareTitle:_item.title,
-            sharePath:sharUrl
+            sharePath:sharUrl,
+            picUrl:'https://xiaochengxu-t.daydaycook.com.cn/1e6a428f-6f98-73a5-bc02-3e3d35b51848.png'
         })
         console.log(_item)
     },
