@@ -23,6 +23,41 @@ Page({
         sharePath:'/pages/index/index',//分享路径
         shareTitle:'DDCTV',
     },
+    showShareBtn2(e){
+        //显示分享图片
+        let self = this;
+        self.setData({
+            mark:true
+        })
+        let id = e.currentTarget.dataset.id;
+        let _item = this.data.currentList.filter(item => item.id == id);
+        if(_item.length > 0){
+            _item = _item[0]
+        }else{
+            _item = this.data.historyList.filter(item => item.id == id)[0]
+        }
+        let sharUrl;
+        let businessCategoryId = _item.businessCategoryId;
+        if(_item.type == 1){
+            //图文
+            sharUrl = 'pages/v-detail/v-detail?id='+id+'&businessCategoryId='+businessCategoryId;
+        }else if(_item.type == 2){
+            //菜谱
+            sharUrl = 'pages/c-detail/c-detail?id='+id+'&businessCategoryId='+businessCategoryId;
+        }
+        self.setData({
+            shareimageUrl:_item.smallPic,
+            shareTitle:_item.title,
+            sharePath:sharUrl
+        })
+        console.log(_item)
+    },
+    hideShareBtn(){
+        //隐藏悬浮窗
+        this.setData({
+            mark:false
+        })
+    },
     showShareBtn(e){
         //是否显示分享按钮
         let self = this;
@@ -46,6 +81,7 @@ Page({
                 //菜谱
                 sharUrl = 'pages/c-detail/c-detail?id='+id+'&businessCategoryId='+businessCategoryId;
             }
+            console.log(_item.smallPic)
             self.setData({
                 shareimageUrl:_item.smallPic,
                 shareTitle:_item.title,
