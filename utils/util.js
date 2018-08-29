@@ -1,4 +1,4 @@
-let status = 3;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
+let status = 0;    // 0 开发环境  1 测试环境  2 staging环境  3生产环境
 
 // if(+new Date() - 1533793762424 > 86400000){
 //     status = 3;
@@ -86,8 +86,8 @@ let changeTime = videoDuration => {
 }
 
 //截取URL字符串
-let getQueryString = (url,name) => {
-    var search = '?'+url.split('?')[1];
+let getQueryString = (_url,name) => {
+    var search = '?'+_url;
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = search == "" ? null : decodeURIComponent(search).substr(1).match(reg);
     if (r != null) return unescape(r[2]);

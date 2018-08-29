@@ -40,18 +40,27 @@ Page({
         let businessCategoryId = _item.businessCategoryId;
         if(_item.type == 1){
             //图文
-            sharUrl = 'pages/v-detail/v-detail?id='+id+'&businessCategoryId='+businessCategoryId;
+            sharUrl = 'pages/v-detail/v-detail';
         }else if(_item.type == 2){
             //菜谱
-            sharUrl = 'pages/c-detail/c-detail?id='+id+'&businessCategoryId='+businessCategoryId;
+            sharUrl = 'pages/c-detail/c-detail';
         }
         self.setData({
             shareimageUrl:_item.smallPic,
             shareTitle:_item.title,
-            sharePath:sharUrl,
-            picUrl:'https://xiaochengxu-t.daydaycook.com.cn/1e6a428f-6f98-73a5-bc02-3e3d35b51848.png'
+            sharePath:sharUrl
         })
-        console.log(_item)
+        util.fetch(util.ajaxUrl+'wechat/generate',{
+            businessCategoryId:businessCategoryId,
+            contentId:id,
+            path:sharUrl
+        }).then(res => {
+            if(res && res.code == 0){
+                self.setData({
+                    picUrl:res.data
+                })
+            }
+        })
     },
     hideShareBtn(){
         //隐藏悬浮窗
@@ -611,15 +620,15 @@ Page({
         //     self.readyToCoupon();
         // }
     },
+    sao(){
+        wx.scanCode({
+            success: (res) => {
+                console.log(res)
+            }
+        })
+    },
     onLoad(e){
         let self = this;
-        //分享进来携带的上一个用户的信息
-        if(e && e.scene){
-            let scene = decodeURIComponent(e.scene);
-            self.setData({
-                invite:scene
-            })
-        }
         //优先判断用户是否已登录
         util.isLogin().then(sessionId => {
             //若sessionId值为空，则没登录，否则已登录

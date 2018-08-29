@@ -260,10 +260,12 @@ Page({
             icon:'loading',
             duration:15000
         })
+        let scene = decodeURIComponent(e.scene);
+        let id = scene != 'undefined'?util.getQueryString(scene,'id'):e.id;
+        let businessCategoryId = scene != 'undefined'?util.getQueryString(scene,'businessCategoryId'):e.businessCategoryId;
         self.setData({
-            businessCategoryId:Number(e.businessCategoryId),
-            id:Number(e.id),
-            invite:e.invite,
+            businessCategoryId:businessCategoryId,
+            id:id,
             backHome:getCurrentPages().length==1?true:false
         })
         util.isLogin().then(sessionId => {
