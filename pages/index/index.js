@@ -40,21 +40,28 @@ Page({
         let businessCategoryId = _item.businessCategoryId;
         if(_item.type == 1){
             //图文
-            sharUrl = 'pages/v-detail/v-detail';
+            sharUrl = 'pages/v-detail/v-detail?id='+id+'&businessCategoryId='+businessCategoryId;
         }else if(_item.type == 2){
             //菜谱
-            sharUrl = 'pages/c-detail/c-detail';
+            sharUrl = 'pages/c-detail/c-detail?id='+id+'&businessCategoryId='+businessCategoryId;
         }
         self.setData({
             shareimageUrl:_item.smallPic,
             shareTitle:_item.title,
-            sharePath:sharUrl
+            sharePath:sharUrl,
+            picUrl:''
+        })
+        wx.showToast({
+            title:'',
+            icon:'loading',
+            duration:15000
         })
         util.fetch(util.ajaxUrl+'wechat/generate',{
             businessCategoryId:businessCategoryId,
             contentId:id,
-            path:sharUrl
+            path:_item.type == 1?'pages/v-detail/v-detail':'pages/c-detail/c-detail'
         }).then(res => {
+            wx.hideToast();
             if(res && res.code == 0){
                 self.setData({
                     picUrl:res.data
@@ -91,7 +98,6 @@ Page({
                 //菜谱
                 sharUrl = 'pages/c-detail/c-detail?id='+id+'&businessCategoryId='+businessCategoryId;
             }
-            console.log(_item.smallPic)
             self.setData({
                 shareimageUrl:_item.smallPic,
                 shareTitle:_item.title,

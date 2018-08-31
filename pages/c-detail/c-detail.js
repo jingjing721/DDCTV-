@@ -190,6 +190,33 @@ Page({
             clearTimeout(self.timeCount);
         }
     },
+    showShareBtn(){
+        //是否显示分享按钮
+        let self = this;
+        self.setData({
+            mark:self.data.mark?false:true
+        })
+        if(self.data.mark){
+            //若显示悬浮窗
+            wx.showToast({
+                title:'',
+                icon:'loading',
+                duration:15000
+            })
+            util.fetch(util.ajaxUrl+'wechat/generate',{
+                businessCategoryId:self.data.businessCategoryId,
+                contentId:self.data.id,
+                path:self.data.type == 1?'pages/v-detail/v-detail':'pages/c-detail/c-detail'
+            }).then(res => {
+                wx.hideToast();
+                if(res && res.code == 0){
+                    self.setData({
+                        picUrl:res.data
+                    })
+                }
+            })
+        }
+    },
     init(){
         //请求详情
         let self = this;
@@ -222,6 +249,7 @@ Page({
                         contentFoodList:res.data.contentFoodList,
                         contentDetailList:res.data.contentDetailList,
                         tagList:res.data.tagList,
+                        type:res.data.type,
                     })
                     // if(!self.data.video){
                     //     //没视频的时候，倒计时30s后发券
@@ -358,13 +386,6 @@ Page({
                     }
                 })
             }
-        })
-    },
-    showShareBtn(){
-        //是否显示分享按钮
-        let self = this;
-        self.setData({
-            mark:self.data.mark?false:true
         })
     },
     onShareAppMessage(){

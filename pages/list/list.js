@@ -36,7 +36,25 @@ Page({
             self.setData({
                 sharePath:sharUrl,
                 shareTitle:_item.title,
-                shareimageUrl:_item.smallPic
+                shareimageUrl:_item.smallPic,
+                picUrl:''
+            })
+            wx.showToast({
+                title:'',
+                icon:'loading',
+                duration:15000
+            })
+            util.fetch(util.ajaxUrl+'wechat/generate',{
+                businessCategoryId:businessCategoryId,
+                contentId:id,
+                path:_item.type == 1?'pages/v-detail/v-detail':'pages/c-detail/c-detail'
+            }).then(res => {
+                wx.hideToast();
+                if(res && res.code == 0){
+                    self.setData({
+                        picUrl:res.data
+                    })
+                }
             })
         }else{
             self.setShareImgUrl()
