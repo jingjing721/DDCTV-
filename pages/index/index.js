@@ -11,7 +11,7 @@ Page({
         userId:'',            //当前用户ID
         mark:false,           //选择发给朋友，还是朋友圈
         mark2:false,          //显示保存本地图片的弹窗
-        picUrl:'',            //弹窗图片
+        picUrl:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',            //弹窗图片
         lastDay:false,        //控制是否显示昨日领券弹窗
         bind:false,           //是否显示绑定图片弹窗
         status:1,             //验证码发送状态
@@ -22,6 +22,58 @@ Page({
         shareimageUrl:'',     //分享图片URL
         sharePath:'/pages/index/index',//分享路径
         shareTitle:'DDCTV',
+    },
+    showShareBtn2(e){
+        //显示分享图片
+        let self = this;
+        self.setData({
+            mark:true
+        })
+        let id = e.currentTarget.dataset.id;
+        let _item = this.data.currentList.filter(item => item.id == id);
+        if(_item.length > 0){
+            _item = _item[0]
+        }else{
+            _item = this.data.historyList.filter(item => item.id == id)[0]
+        }
+        let sharUrl;
+        let businessCategoryId = _item.businessCategoryId;
+        if(_item.type == 1){
+            //图文
+            sharUrl = 'pages/v-detail/v-detail?id='+id+'&businessCategoryId='+businessCategoryId;
+        }else if(_item.type == 2){
+            //菜谱
+            sharUrl = 'pages/c-detail/c-detail?id='+id+'&businessCategoryId='+businessCategoryId;
+        }
+        self.setData({
+            shareimageUrl:_item.smallPic,
+            shareTitle:_item.title,
+            sharePath:sharUrl,
+            picUrl:''
+        })
+        wx.showToast({
+            title:'',
+            icon:'loading',
+            duration:15000
+        })
+        util.fetch(util.ajaxUrl+'wechat/generate',{
+            businessCategoryId:businessCategoryId,
+            contentId:id,
+            path:_item.type == 1?'pages/v-detail/v-detail':'pages/c-detail/c-detail'
+        }).then(res => {
+            wx.hideToast();
+            if(res && res.code == 0){
+                self.setData({
+                    picUrl:res.data
+                })
+            }
+        })
+    },
+    hideShareBtn(){
+        //隐藏悬浮窗
+        this.setData({
+            mark:false
+        })
     },
     showShareBtn(e){
         //是否显示分享按钮
@@ -159,8 +211,8 @@ Page({
                     })
                 }
                 self.setShareImgUrl();
-                //若当天请求没数据，则显示前一天的
-                if(self.data.currentList.length < 3 && self.data.myDate && self.data.init){
+                //若当天请求没数据，则显示前一天的 或 首次显示到页面的数据低于3条的(防止页面没法滑动)
+                if((self.data.currentList.length < 3 && self.data.myDate && self.data.init) || (self.data.myDate && !self.data.init && self.data.historyList.length < 3)){
                     self.setData({
                         init:false
                     })
@@ -574,15 +626,15 @@ Page({
         //     self.readyToCoupon();
         // }
     },
+    sao(){
+        wx.scanCode({
+            success: (res) => {
+                console.log(res)
+            }
+        })
+    },
     onLoad(e){
         let self = this;
-        //分享进来携带的上一个用户的信息
-        if(e && e.scene){
-            let scene = decodeURIComponent(e.scene);
-            self.setData({
-                invite:scene
-            })
-        }
         //优先判断用户是否已登录
         util.isLogin().then(sessionId => {
             //若sessionId值为空，则没登录，否则已登录

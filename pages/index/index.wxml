@@ -18,7 +18,7 @@
                 <view class="desc" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.summary}}</view>
                 <view class="control">
                     <!-- <view class="info" wx:if="{{index==0 && info}}">分享新用户、观看内容得优惠券</view> -->
-                    <view class="right share" catchtap="showShareBtn" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}"></view>
+                    <view class="right share" catchtap="showShareBtn2" data-id="{{item.id}}"></view>
                     <view class="right heart{{item.isLike?' on':''}}" catchtap="goHeart" data-id="{{item.id}}">
                         {{item.likeCount}}
                         <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" class="myButton" data-from="1" data-id="{{item.id}}" hover-class="noBg"></button>
@@ -43,7 +43,7 @@
                     <view class="desc" catchtap="goDetail" data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}">{{item.summary}}</view>
                     <view class="control">
                         <view class="info" wx:if="{{index==0 && info}}">分享新用户、观看内容得优惠券</view>
-                        <view class="right share" catchtap="showShareBtn"data-businessCategoryId="{{item.businessCategoryId}}" data-id="{{item.id}}"></view>
+                        <view class="right share" catchtap="showShareBtn2" data-id="{{item.id}}"></view>
                         <view class="right heart{{item.isLike?' on':''}}" catchtap="goHeart" data-id="{{item.id}}">
                             {{item.likeCount}}
                             <button wx:if="{{!sessionId}}" open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" hover-class="noBg" class="myButton" data-from="1" data-id="{{item.id}}"></button>
@@ -65,19 +65,25 @@
     <view class="end" wx:if="{{!myDate}}">我是有底线的</view>
 </view>
 <!-- 分享悬浮窗 -->
-<view class="shareMark" catchtap="showShareBtn" wx:if="{{mark}}" catchtouchmove='stop'>
+<view class="shareMark" catchtap="hideShareBtn" wx:if="{{mark}}" catchtouchmove='stop'>
+    <view class="pics">
+        <image src="{{picUrl}}"></image>
+    </view>
     <view class="shareBox" catchtap="stop">
-        <button open-type="share" class="btns btn1" hover-class="noBg">
-            <view class="img">
-                <image src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></image>
+        <view class="top">分享</view>
+        <view class="bottom">
+            <button open-type="share" class="btns btn1" hover-class="noBg">
+                <view class="img">
+                    <image src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></image>
+                </view>
+                <view class="w">转发好友</view>
+            </button>
+            <view class="btns btn2" catchtap="savePic">
+                <view class="img">
+                    <image src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></image>
+                </view>
+                <view class="w">保存海报</view>
             </view>
-            <view class="w">微信好友</view>
-        </button>
-        <view class="btns btn2" catchtap="showPic">
-            <view class="img">
-                <image src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></image>
-            </view>
-            <view class="w">保存图片</view>
         </view>
     </view>
 </view>

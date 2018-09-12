@@ -1,4 +1,5 @@
 import util from '../../utils/util.js';
+var WxParse = require('../../wxParse/wxParse.js');
 Page({
     data:{
         pageShown:0,         //页面是否显示 0不显示  1显示
@@ -190,6 +191,33 @@ Page({
             clearTimeout(self.timeCount);
         }
     },
+    showShareBtn(){
+        //是否显示分享按钮
+        let self = this;
+        self.setData({
+            mark:self.data.mark?false:true
+        })
+        if(self.data.mark){
+            //若显示悬浮窗
+            wx.showToast({
+                title:'',
+                icon:'loading',
+                duration:15000
+            })
+            util.fetch(util.ajaxUrl+'wechat/generate',{
+                businessCategoryId:self.data.businessCategoryId,
+                contentId:self.data.id,
+                path:self.data.type == 1?'pages/v-detail/v-detail':'pages/c-detail/c-detail'
+            }).then(res => {
+                wx.hideToast();
+                if(res && res.code == 0){
+                    self.setData({
+                        picUrl:res.data
+                    })
+                }
+            })
+        }
+    },
     init(){
         //请求详情
         let self = this;
@@ -201,10 +229,50 @@ Page({
             wx.hideToast();
             if(res && res.code == 0){
                 if(res && res.code == 0){
+                    var vHtml = res.data.contentText;
+                    /**
+                    * WxParse.emojisInit(reg,baseSrc,emojis)
+                    * 1.reg，如格式为[00]=>赋值 reg='[]'
+                    * 2.baseSrc,为存储emojis的图片文件夹
+                    * 3.emojis,定义表情键值对
+                    */
+                    WxParse.emojisInit('[]', "../../wxParse/emojis/", {
+                        "00": "00.gif",
+                        "01": "01.gif",
+                        "02": "02.gif",
+                        "03": "03.gif",
+                        "04": "04.gif",
+                        "05": "05.gif",
+                        "06": "06.gif",
+                        "07": "07.gif",
+                        "08": "08.gif",
+                        "09": "09.gif",
+                        "09": "09.gif",
+                        "10": "10.gif",
+                        "11": "11.gif",
+                        "12": "12.gif",
+                        "13": "13.gif",
+                        "14": "14.gif",
+                        "15": "15.gif",
+                        "16": "16.gif",
+                        "17": "17.gif",
+                        "18": "18.gif",
+                        "19": "19.gif",
+                    });
+                    /**
+                    * WxParse.wxParse(bindName , type, data, target,imagePadding)
+                    * 1.bindName绑定的数据名(必填)
+                    * 2.type可以为html或者md(必填)
+                    * 3.data为传入的具体数据(必填)
+                    * 4.target为Page对象,一般为this(必填)
+                    * 5.imagePadding为当图片自适应是左右的单一padding(默认为0,可选)
+                    */
+                    WxParse.wxParse('vHtml', 'html', vHtml, self, 5);
                     wx.setNavigationBarTitle({
                         title:res.data.title
                     })
                     self.setData({
+                        _vHtml:res.data.contentText,
                         smallPic:res.data.smallPic,
                         likeCount:res.data.likeCount,
                         title:res.data.title,
@@ -215,7 +283,8 @@ Page({
                         summary:res.data.summary,
                         contentDetailList:res.data.contentDetailList,
                         contentFoodList:res.data.contentFoodList,
-                        tagList:res.data.tagList
+                        tagList:res.data.tagList,
+                        type:res.data.type,
                     })
                     // if(!self.data.video){
                     //     //没视频的时候，倒计时30s后发券
@@ -254,10 +323,12 @@ Page({
             icon:'loading',
             duration:15000
         })
+        let scene = decodeURIComponent(e.scene);
+        let id = scene != 'undefined'?util.getQueryString(scene,'id'):e.id;
+        let businessCategoryId = scene != 'undefined'?util.getQueryString(scene,'businessCategoryId'):e.businessCategoryId;
         self.setData({
-            businessCategoryId:Number(e.businessCategoryId),
-            id:Number(e.id),
-            invite:e.invite,
+            businessCategoryId:businessCategoryId,
+            id:id,
             backHome:getCurrentPages().length==1?true:false
         })
         util.isLogin().then(sessionId => {
@@ -350,13 +421,6 @@ Page({
                     }
                 })
             }
-        })
-    },
-    showShareBtn(){
-        //是否显示分享按钮
-        let self = this;
-        self.setData({
-            mark:self.data.mark?false:true
         })
     },
     onShareAppMessage(){
