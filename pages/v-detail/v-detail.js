@@ -1,4 +1,5 @@
 import util from '../../utils/util.js';
+var WxParse = require('../../wxParse/wxParse.js');
 Page({
     data:{
         pageShown:0,         //页面是否显示 0不显示  1显示
@@ -228,10 +229,50 @@ Page({
             wx.hideToast();
             if(res && res.code == 0){
                 if(res && res.code == 0){
+                    var vHtml = res.data.contentText;
+                    /**
+                    * WxParse.emojisInit(reg,baseSrc,emojis)
+                    * 1.reg，如格式为[00]=>赋值 reg='[]'
+                    * 2.baseSrc,为存储emojis的图片文件夹
+                    * 3.emojis,定义表情键值对
+                    */
+                    WxParse.emojisInit('[]', "../../wxParse/emojis/", {
+                        "00": "00.gif",
+                        "01": "01.gif",
+                        "02": "02.gif",
+                        "03": "03.gif",
+                        "04": "04.gif",
+                        "05": "05.gif",
+                        "06": "06.gif",
+                        "07": "07.gif",
+                        "08": "08.gif",
+                        "09": "09.gif",
+                        "09": "09.gif",
+                        "10": "10.gif",
+                        "11": "11.gif",
+                        "12": "12.gif",
+                        "13": "13.gif",
+                        "14": "14.gif",
+                        "15": "15.gif",
+                        "16": "16.gif",
+                        "17": "17.gif",
+                        "18": "18.gif",
+                        "19": "19.gif",
+                    });
+                    /**
+                    * WxParse.wxParse(bindName , type, data, target,imagePadding)
+                    * 1.bindName绑定的数据名(必填)
+                    * 2.type可以为html或者md(必填)
+                    * 3.data为传入的具体数据(必填)
+                    * 4.target为Page对象,一般为this(必填)
+                    * 5.imagePadding为当图片自适应是左右的单一padding(默认为0,可选)
+                    */
+                    WxParse.wxParse('vHtml', 'html', vHtml, self, 5);
                     wx.setNavigationBarTitle({
                         title:res.data.title
                     })
                     self.setData({
+                        _vHtml:res.data.contentText,
                         smallPic:res.data.smallPic,
                         likeCount:res.data.likeCount,
                         title:res.data.title,

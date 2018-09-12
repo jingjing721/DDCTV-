@@ -1,3 +1,4 @@
+<import src="../../wxParse/wxParse.wxml"/>
 <view class="wraper" wx:if="{{pageShown==1}}">
     <!-- 保存图片 -->
     <view class="savePic" wx:if="{{mark2}}" catchtap="showPic">
@@ -35,6 +36,7 @@
                 <view class="word" wx:if="{{item.detail}}">{{item.detail}}</view>
             </view>
         </view>
+        <template wx:if="{{_vHtml}}" is="wxParse" data="{{wxParseData:vHtml.nodes}}"/>
     </scroll-view>
     <!-- 返回首页 -->
     <view class="backHome" catchtap="goHome" wx:if="{{backHome}}"></view>
